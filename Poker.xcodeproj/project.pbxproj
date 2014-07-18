@@ -13,6 +13,10 @@
 		C98793001964AB840063587F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C98792FE1964AB840063587F /* Main.storyboard */; };
 		C98793021964AB840063587F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C98793011964AB840063587F /* Images.xcassets */; };
 		C987930E1964AB840063587F /* PokerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C987930D1964AB840063587F /* PokerTests.swift */; };
+		C98793181964AC870063587F /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98793171964AC870063587F /* Card.swift */; };
+		C98CED74196CA00400345454 /* Hand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98CED73196CA00400345454 /* Hand.swift */; };
+		C99C7E2D19745B2C00920F0A /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C7E2C19745B2C00920F0A /* Game.swift */; };
+		C9A5A88B1965F83A00F5D4CC /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A5A88A1965F83A00F5D4CC /* Deck.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 		C98793071964AB840063587F /* PokerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C987930C1964AB840063587F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C987930D1964AB840063587F /* PokerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokerTests.swift; sourceTree = "<group>"; };
+		C98793171964AC870063587F /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Card.swift; path = Classes/Card.swift; sourceTree = "<group>"; };
+		C98CED73196CA00400345454 /* Hand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Hand.swift; path = Classes/Hand.swift; sourceTree = "<group>"; };
+		C99C7E2C19745B2C00920F0A /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Game.swift; path = Classes/Game.swift; sourceTree = "<group>"; };
+		C9A5A88A1965F83A00F5D4CC /* Deck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Deck.swift; path = Classes/Deck.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +86,10 @@
 			isa = PBXGroup;
 			children = (
 				C98792F71964AB840063587F /* AppDelegate.swift */,
+				C98793171964AC870063587F /* Card.swift */,
+				C99C7E2C19745B2C00920F0A /* Game.swift */,
+				C9A5A88A1965F83A00F5D4CC /* Deck.swift */,
+				C98CED73196CA00400345454 /* Hand.swift */,
 				C98792FC1964AB840063587F /* ViewController.swift */,
 				C98792FE1964AB840063587F /* Main.storyboard */,
 				C98793011964AB840063587F /* Images.xcassets */,
@@ -213,7 +225,11 @@
 			files = (
 				C98792FD1964AB840063587F /* ViewController.swift in Sources */,
 				C98792F81964AB840063587F /* AppDelegate.swift in Sources */,
+				C99C7E2D19745B2C00920F0A /* Game.swift in Sources */,
+				C98CED74196CA00400345454 /* Hand.swift in Sources */,
+				C9A5A88B1965F83A00F5D4CC /* Deck.swift in Sources */,
 				C98792FB1964AB840063587F /* Poker.xcdatamodeld in Sources */,
+				C98793181964AC870063587F /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +417,7 @@
 				C98793131964AB840063587F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C98793141964AB840063587F /* Build configuration list for PBXNativeTarget "PokerTests" */ = {
 			isa = XCConfigurationList;
@@ -409,6 +426,7 @@
 				C98793161964AB840063587F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
