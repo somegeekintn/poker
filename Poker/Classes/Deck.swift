@@ -54,15 +54,11 @@ class Deck : Printable {
 		}
 	}
 	
-	func draw(numCards: Int) -> [Card] {
-		var cards	= [Card]()
-		
-		for card in self.cards[self.position ..< self.position + numCards] {
-			card.reset()
-			cards.append(card)
-		}
-		self.position += numCards
-		
-		return cards
+	func drawCard () -> Card {
+		var card = self.cards[self.position++]
+
+		card.reset();
+
+		return card;
 	}
 }

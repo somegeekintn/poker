@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Quiet Spark. All rights reserved.
 //
 
-/* --- Globals --- */
+// MARK: - Globals
 
 func ==(lhs: Card, rhs: Card) -> Bool {
 	return lhs.rank == rhs.rank && lhs.suit == rhs.suit;
@@ -20,7 +20,7 @@ func <(lhs: Card.Rank, rhs: Card.Rank) -> Bool {
 	return lhs.toRaw() < rhs.toRaw();
 }
 
-/* --- Card --- */
+// MARK: - Card
 
 class Card : Comparable, Printable {
 	let rank		: Rank
@@ -50,7 +50,7 @@ class Card : Comparable, Printable {
 		}
 	}
 
-	/* --- Rank --- */
+	// MARK: - Rank
 	
 	enum Rank: Int, Comparable, Printable {
 		case Two = 0, Three, Four, Five, Six, Seven, Eight, Nine, Ten
@@ -121,7 +121,7 @@ class Card : Comparable, Printable {
 		}
 	}
 
-	/* --- Suit --- */
+	// MARK: - Suit
 
 	enum Suit: Int, Printable {
 		case Club = 0, Diamond, Heart, Spade

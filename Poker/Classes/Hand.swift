@@ -8,17 +8,27 @@
 
 import Swift
 
-extension Array  {
+extension Array {
 	func iterate(apply: (T) -> ()) {
 		for item in self { apply(item) }
 	}
 	
+	func filteredCount(apply: (T) -> Bool) -> Int {
+		var count = 0
+		for item in self {
+			if apply(item) {
+				count++;
+			}
+		}
+		return count
+	}
+
 	func indexOf(test: (T) -> Bool) -> Int? {
 		var itemIndex: Int? = nil
 		
 		for (index, value) in enumerate(self) {
 			if (test(value)) {
-				itemIndex = index;
+				itemIndex = index
 				break;
 			}
 		}
@@ -28,19 +38,20 @@ extension Array  {
 }
 
 class Hand : Printable {
-	let		capacity	= 5
-	var		cards		= [Card]()
+	let capacity	= 5
+	var cardSlots	= [Card?](count: 5, repeatedValue: nil)
 	
     var description: String {
 		get {
-			var desc	= String()
+			var desc = String()
+			var cards = self.cards
 			
-			if (self.cards.isEmpty) {
+			if (cards.count == 0) {
 				desc = "no cards"
 			}
 			else {
-				for card in self.cards {
-					if (!desc.isEmpty) {
+				for card in cards {
+					if !desc.isEmpty {
 						desc += ","
 					}
 					desc += card.description
@@ -53,17 +64,32 @@ class Hand : Printable {
 		}
 	}
 	
+	var cards : [Card] {
+		get {
+			var	cards = [Card]();
+			
+			for card in self.cardSlots {
+				if let card = card {
+					cards.append(card);
+				}
+			}
+			
+			return cards
+		}
+	}
+	
 	func evaluate() -> Category {
 		var	category		= Category.None;
+		var	sortedCards		= self.cards
 
-		if self.cards.count > 1 {	// at least 2 cards required to make a hand
-			var	sortedCards		= self.cards.sorted{ $0 > $1 }
+		if sortedCards.count > 1 {	// at least 2 cards required to make a hand
 			var	sortedRanks		= [[Card]]()
 			var	sortedSuits		= [[Card]]()
 			var isStraight		: Bool = true
 			var isFlush			: Bool
 			var lastCard		: Card? = nil
 			
+			sortedCards.sort{ $0 > $1 }
 			for card in sortedCards {
 				// --->>> count ranks
 				if var itemIdx = (sortedRanks.indexOf { rankList in return rankList[0].rank == card.rank }) {
@@ -157,28 +183,20 @@ class Hand : Printable {
 	}
 
 	func initialDrawFromDeck(deck: Deck) {
-		self.cards = [Card]()
+		self.cardSlots = [Card?](count: 5, repeatedValue: nil)
 		self.drawFromDeck(deck)
 	}
 	
 	func drawFromDeck(deck: Deck) {
-		self.cards += deck.draw(self.capacity - self.cards.count)
-	}
-	
-	func discard(discards: Array<Card>) {
-		self.cards = self.cards.filter {
-			(card: Card) -> Bool in
-			return find(discards, card) ? false : true
+		for (index, value) in enumerate(self.cardSlots) {
+			if (value == nil || !value!.hold) {
+				self.cardSlots[index] = deck.drawCard();
+			}
 		}
 	}
 	
-	func discard(discards: Array<Int>) {
-		var	cards = [Card]()
-		
-		for cardIdx in discards {
-			cards.append(self.cards[cardIdx])
-		}
-		self.discard(cards)
+	func cardAt(position: Int) -> Card? {
+		return self.cardSlots[position];
 	}
 
 	/* --- Category --- */
