@@ -14,7 +14,6 @@ class Game : Printable {
 
 	var deck			= Deck()
 	var hand			= Hand()
-	var state			= State.Ready
 	var betHandler		: betCallback? = nil
 	var stateHandler	: stateCallback? = nil
 	
@@ -32,7 +31,7 @@ class Game : Printable {
 	}
 	
 	class func maxBet() -> Int {
-		return 5;
+		return 5
 	}
 	
 	var description: String {
@@ -56,18 +55,30 @@ class Game : Printable {
 		}
 	}
 	
+	var state : State = State.Ready {
+		willSet(newValue) {
+			if var stateHandler = self.stateHandler {
+				stateHandler(newState: newValue)
+			}
+		}
+	}
+	
     var bet : Int {
 		// Swift's handling of getters / setters leaves something to be desired
-		set(newValue) {
-			var actualValue		= (newValue > Game.maxBet()) ? Game.maxBet() : newValue;
+		set (newValue) {
+			var actualValue		= (newValue > Game.maxBet()) ? Game.maxBet() : newValue
 			
-			if (self.actualBet != actualValue) {
+			if actualValue > 0 && self.state == State.Complete {
+				self.state = State.Ready;
+			}
+			
+			if self.actualBet != actualValue {
 				self.actualBet = actualValue
 			}
 		}
 	
 		get {
-			return self.actualBet;
+			return self.actualBet
 		}
 	}
 	
@@ -93,7 +104,7 @@ class Game : Printable {
 	// MARK: - Cards
 	
 	func playerCardAt(cardIndex: Int) -> Card? {
-		return self.hand.cardAt(cardIndex);
+		return self.hand.cardAt(cardIndex)
 	}
 	
 //	func canDeal() -> Bool {
@@ -101,7 +112,7 @@ class Game : Printable {
 //	}
 	
 	func deal() -> Bool {
-		var dealt	: Bool = false;
+		var dealt	: Bool = false
 		
 		if (self.canDeal) {
 			self.deck.shuffle()
@@ -110,19 +121,20 @@ class Game : Printable {
 			dealt = true
 		}
 		
-		return dealt;
+		return dealt
 	}
 
 	func draw() -> Bool {
-		var drew	: Bool = false;
+		var drew	: Bool = false
 		
 		if (self.state == State.Dealt) {
 			self.hand.drawFromDeck(self.deck)
 			self.state = State.Complete
+			self.bet = 0
 			drew = true
 		}
 		
-		return drew;
+		return drew
 	}
 
 	// MARK: - Debugging
@@ -132,7 +144,7 @@ class Game : Printable {
 		for var idx=0; idx<100; idx++ {
 			self.deal()
 			if self.hand.evaluate() != Hand.Category.None {
-				println("\(idx): \(self)");
+				println("\(idx): \(self)")
 			}
 			
 			self.state = Game.State.Ready

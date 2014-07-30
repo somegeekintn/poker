@@ -17,7 +17,7 @@ extension Array {
 		var count = 0
 		for item in self {
 			if apply(item) {
-				count++;
+				count++
 			}
 		}
 		return count
@@ -29,7 +29,7 @@ extension Array {
 		for (index, value) in enumerate(self) {
 			if (test(value)) {
 				itemIndex = index
-				break;
+				break
 			}
 		}
 		
@@ -60,17 +60,17 @@ class Hand : Printable {
 				desc += " - \(self.evaluate())"
 			}
 			
-			return desc;
+			return desc
 		}
 	}
 	
 	var cards : [Card] {
 		get {
-			var	cards = [Card]();
+			var	cards = [Card]()
 			
 			for card in self.cardSlots {
 				if let card = card {
-					cards.append(card);
+					cards.append(card)
 				}
 			}
 			
@@ -79,7 +79,7 @@ class Hand : Printable {
 	}
 	
 	func evaluate() -> Category {
-		var	category		= Category.None;
+		var	category		= Category.None
 		var	sortedCards		= self.cards
 
 		if sortedCards.count > 1 {	// at least 2 cards required to make a hand
@@ -122,7 +122,7 @@ class Hand : Printable {
 							isStraight = false
 						}
 					}
-					lastCard = card;
+					lastCard = card
 				}
 			}
 
@@ -179,7 +179,7 @@ class Hand : Printable {
 			}
 		}
 
-		return category;
+		return category
 	}
 
 	func initialDrawFromDeck(deck: Deck) {
@@ -190,13 +190,13 @@ class Hand : Printable {
 	func drawFromDeck(deck: Deck) {
 		for (index, value) in enumerate(self.cardSlots) {
 			if (value == nil || !value!.hold) {
-				self.cardSlots[index] = deck.drawCard();
+				self.cardSlots[index] = deck.drawCard()
 			}
 		}
 	}
 	
 	func cardAt(position: Int) -> Card? {
-		return self.cardSlots[position];
+		return self.cardSlots[position]
 	}
 
 	/* --- Category --- */

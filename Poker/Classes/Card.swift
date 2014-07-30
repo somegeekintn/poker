@@ -9,15 +9,15 @@
 // MARK: - Globals
 
 func ==(lhs: Card, rhs: Card) -> Bool {
-	return lhs.rank == rhs.rank && lhs.suit == rhs.suit;
+	return lhs.rank == rhs.rank && lhs.suit == rhs.suit
 }
 
 func <(lhs: Card, rhs: Card) -> Bool {
-	return lhs.rank < rhs.rank;
+	return lhs.rank < rhs.rank
 }
 
 func <(lhs: Card.Rank, rhs: Card.Rank) -> Bool {
-	return lhs.toRaw() < rhs.toRaw();
+	return lhs.toRaw() < rhs.toRaw()
 }
 
 // MARK: - Card
@@ -101,23 +101,23 @@ class Card : Comparable, Printable {
 		}
 		
 		func nextHigher() -> Rank? {
-			var next	: Rank? = nil;
+			var next	: Rank? = nil
 			
 			if (self != Ace) {
 				next = Rank.fromRaw(self.toRaw() + 1)
 			}
 			
-			return next;
+			return next
 		}
 		
 		func nextLower() -> Rank? {
-			var prev	: Rank? = nil;
+			var prev	: Rank? = nil
 			
 			if (self != Two) {
 				prev = Rank.fromRaw(self.toRaw() - 1)
 			}
 			
-			return prev;
+			return prev
 		}
 	}
 

@@ -27,17 +27,17 @@ class Deck : Printable {
 			
 			for card in self.cards {
 				if (!desc.isEmpty) {
-					desc += ",";
+					desc += ","
 				}
 				desc += card.description
 			}
 			
-			return desc;
+			return desc
 		}
 	}
 	
 	func shuffle() {
-		let cardCount	= cards.count;
+		let cardCount	= cards.count
 		
 		self.position = 0
 		for var cardIdx=0; cardIdx<cardCount; cardIdx++ {
@@ -57,8 +57,8 @@ class Deck : Printable {
 	func drawCard () -> Card {
 		var card = self.cards[self.position++]
 
-		card.reset();
+		card.reset()
 
-		return card;
+		return card
 	}
 }

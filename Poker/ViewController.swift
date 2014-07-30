@@ -8,8 +8,25 @@
 
 import UIKit
 
+extension UIView {
+	func dumpViews(depth: Int = 0) {
+		var tabs = String();
+		
+		for idx in 0..<depth {
+			tabs += "\t"
+		}
+		println("\(tabs)-\(self)")
+		
+		for view in self.subviews {
+			view.dumpViews(depth: depth + 1);
+		}
+	}
+}
+
 class ViewController: UIViewController {
-	@IBOutlet var holdButtons: [UIButton]!
+	@IBOutlet var betField: UILabel!
+	var holdButtons: [UIButton]?
+	let cHoldButtonTagStart: Int = 1000
 	
 	// MARK: - Lifecycle
 	
@@ -17,21 +34,54 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		
 		Game.sharedGame().betHandler = {
-			(newBet) in println("handler: \(newBet)")
+			(newBet: Int) -> () in
+				println("handler: \(newBet)")
+				self.betField.text = "Bet: \(newBet)"
+		}
+		
+		Game.sharedGame().stateHandler = {
+			(newState: Game.State) -> () in
+				println("new state: \(newState)")
+				self.updateElements()
+		}
+	}
+
+	override func viewDidLayoutSubviews()  {
+		super.viewDidLayoutSubviews()
+		
+		// We do this here because for some reason, all subviews aren't actually loaded in viewDidLoad
+		// Not sure if that's related to Swift or what exactly. Not ideal, but unsure what else to do
+		if !self.holdButtons {
+			var buttons = [UIButton]();
+			for buttonTag in self.cHoldButtonTagStart..<self.cHoldButtonTagStart + 5 {
+				if var buttonView = self.view.viewWithTag(buttonTag) as? UIButton {
+					buttons.append(buttonView)
+				}
+			}
+			
+			self.holdButtons = buttons;
+			updateElements();
 		}
 	}
 
 	override func shouldAutorotate() -> Bool {
-		return true;
+		return true
 	}
 	
 	override func supportedInterfaceOrientations() -> Int {
-		return Int(UIInterfaceOrientationMask.Landscape.toRaw());
+		return Int(UIInterfaceOrientationMask.Landscape.toRaw())
 	}
 	
-	func reset() {
-		for button in self.holdButtons {
-			button.setTitle("Hold", forState: UIControlState.Normal)
+	func updateElements() {
+		if var holdButtons = self.holdButtons {
+			for button in holdButtons {
+				var card = Game.sharedGame().playerCardAt(button.tag - 1000)
+				let enabled: Bool = card != nil
+				let held: Bool = !card?.hold
+
+				button.enabled = enabled
+				button.setTitle("Hold", forState: UIControlState.Normal)
+			}
 		}
 	}
 	
@@ -50,23 +100,23 @@ class ViewController: UIViewController {
 	@IBAction func deal(sender: AnyObject) {
 		switch Game.sharedGame().state {
 			case Game.State.Ready:
-				Game.sharedGame().deal();
+				Game.sharedGame().deal()
 
 			case Game.State.Dealt:
-				Game.sharedGame().draw();
+				Game.sharedGame().draw()
 
 			case Game.State.Complete:
-				break;
+				break
 		}
 		
 		println("deal:\n\(Game.sharedGame())")
 	}
 	
 	@IBAction func toggleHold(sender: AnyObject) {
-		let button = sender as? UIButton;
+		let button = sender as? UIButton
 		
 		if let button = button {
-			var card	= Game.sharedGame().playerCardAt(button.tag)
+			var card	= Game.sharedGame().playerCardAt(button.tag - 1000)
 			
 			if var card = card {
 				card.hold = !card.hold
