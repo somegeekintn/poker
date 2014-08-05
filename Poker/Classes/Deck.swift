@@ -16,7 +16,7 @@ class Deck : Printable {
 	init() {
 		for rawSuit in Card.Suit.MinSuit.toRaw()...Card.Suit.MaxSuit.toRaw() {
 			for rawRank in Card.Rank.MinRank.toRaw()...Card.Rank.MaxRank.toRaw() {
-				cards += Card(rank: Card.Rank.fromRaw(rawRank)!, suit: Card.Suit.fromRaw(rawSuit)!)
+				cards.append(Card(rank: Card.Rank.fromRaw(rawRank)!, suit: Card.Suit.fromRaw(rawSuit)!))
 			}
 		}
 	}

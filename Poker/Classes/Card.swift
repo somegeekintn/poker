@@ -60,6 +60,12 @@ class Card : Comparable, Printable {
 		static let MaxRank = Ace
 		static let RankCount = MaxRank.toRaw() + 1
 		
+		var identifier: String {
+			get {
+				return self.description
+			}
+		}
+		
 		var description: String {
 			get {
 				switch self {
@@ -130,6 +136,21 @@ class Card : Comparable, Printable {
 		static let MaxSuit		= Spade
 		static let SuitCount	= MaxSuit.toRaw() + 1
 
+		var identifier: String {
+			get {
+				switch self {
+					case .Club:
+						return "C"
+					case .Diamond:
+						return "D"
+					case .Heart:
+						return "H"
+					case .Spade:
+						return "S"
+				}
+			}
+		}
+		
 		var description: String {
 			get {
 				switch self {

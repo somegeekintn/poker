@@ -48,9 +48,9 @@ class Game : Printable {
 	}
 	
 	var actualBet : Int = 0 {
-		willSet(newValue) {
+		didSet(oldValue) {
 			if var betHandler = self.betHandler {
-				betHandler(newBet: newValue)
+				betHandler(newBet: self.bet)
 			}
 		}
 	}
@@ -106,10 +106,6 @@ class Game : Printable {
 	func playerCardAt(cardIndex: Int) -> Card? {
 		return self.hand.cardAt(cardIndex)
 	}
-	
-//	func canDeal() -> Bool {
-//		return self.bet != 0 && self.state == State.Ready
-//	}
 	
 	func deal() -> Bool {
 		var dealt	: Bool = false

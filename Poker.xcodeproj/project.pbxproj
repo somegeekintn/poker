@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C952C09B1990ECCA006FF990 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C952C09A1990ECCA006FF990 /* CardView.swift */; };
 		C98792F81964AB840063587F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98792F71964AB840063587F /* AppDelegate.swift */; };
 		C98792FB1964AB840063587F /* Poker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C98792F91964AB840063587F /* Poker.xcdatamodeld */; };
 		C98792FD1964AB840063587F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98792FC1964AB840063587F /* ViewController.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C952C09A1990ECCA006FF990 /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CardView.swift; path = Classes/CardView.swift; sourceTree = "<group>"; };
 		C98792F21964AB840063587F /* Poker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Poker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C98792F61964AB840063587F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C98792F71964AB840063587F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			children = (
 				C98792F71964AB840063587F /* AppDelegate.swift */,
 				C98793171964AC870063587F /* Card.swift */,
+				C952C09A1990ECCA006FF990 /* CardView.swift */,
 				C99C7E2C19745B2C00920F0A /* Game.swift */,
 				C9A5A88A1965F83A00F5D4CC /* Deck.swift */,
 				C98CED73196CA00400345454 /* Hand.swift */,
@@ -229,6 +232,7 @@
 				C98CED74196CA00400345454 /* Hand.swift in Sources */,
 				C9A5A88B1965F83A00F5D4CC /* Deck.swift in Sources */,
 				C98792FB1964AB840063587F /* Poker.xcdatamodeld in Sources */,
+				C952C09B1990ECCA006FF990 /* CardView.swift in Sources */,
 				C98793181964AC870063587F /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
