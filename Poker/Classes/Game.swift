@@ -69,7 +69,7 @@ class Game : Printable {
 			var actualValue		= (newValue > Game.maxBet()) ? Game.maxBet() : newValue
 			
 			if actualValue > 0 && self.state == State.Complete {
-				self.state = State.Ready;
+				self.state = State.Ready
 			}
 			
 			if self.actualBet != actualValue {

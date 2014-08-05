@@ -10,7 +10,7 @@ import UIKit
 
 extension UIView {
 	func dumpViews(depth: Int = 0) {
-		var tabs = String();
+		var tabs = String()
 		
 		for idx in 0..<depth {
 			tabs += "\t"
@@ -18,7 +18,7 @@ extension UIView {
 		println("\(tabs)-\(self)")
 		
 		for view in self.subviews {
-			view.dumpViews(depth: depth + 1);
+			view.dumpViews(depth: depth + 1)
 		}
 	}
 }
@@ -44,49 +44,58 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		Game.sharedGame().betHandler = {
-			(newBet: Int) -> () in
-				self.updateElements(Game.sharedGame().state);
+		Game.sharedGame().betHandler = { (newBet: Int) -> () in
+			self.updateElements(Game.sharedGame().state)
 		}
 		
-		Game.sharedGame().stateHandler = {
-			(newState: Game.State) -> () in
-				// transitions here, while updateElements can be called at any point
-
-				if var cardViews = self.cardViews {
-					switch newState {
-						case Game.State.Ready:
+		Game.sharedGame().stateHandler = { (newState: Game.State) -> () in
+println("newstate \(newState)")
+			// transitions here, while updateElements can be called at any point
+			if var cardViews = self.cardViews {
+				switch newState {
+					case .Ready:
+						for cardView in cardViews {
+							cardView.card = nil
+							cardView.revealed = false
+						}
+					case .Dealt:
+						for cardView in cardViews {
+							var card	= Game.sharedGame().playerCardAt(cardView.tag - self.cCardViewTagStart)
+							
+							cardView.card = card
+						}
+						self.positionCards(UIRectEdge.None, animated: true, completion: {
 							for cardView in cardViews {
-								cardView.card = nil
-								cardView.revealed = false
+								cardView.setRevealed(true, animated: true)
+								cardView.enabled = true
 							}
-						case .Dealt:
-							for cardView in cardViews {
-								var card	= Game.sharedGame().playerCardAt(cardView.tag - self.cCardViewTagStart)
-								
-								cardView.card = card;
-							}
-							self.positionCards(UIRectEdge.None, animated: true, completion: {
-								for cardView in cardViews {
-									cardView.revealed = true
-								}
 						})
-						case .Complete:
-							for cardView in cardViews {
+					case .Complete:
+						for cardView in cardViews {
+							cardView.enabled = false
+							if !cardView.revealed {
 								var card	= Game.sharedGame().playerCardAt(cardView.tag - self.cCardViewTagStart)
-								
-								cardView.card = card;
+							
+								cardView.card = card
+								cardView.setRevealed(true, animated: true)
 							}
-					}
+							else {
+								cardView.card?.hold = false
+								cardView.update()
+							}
+						}
+					
+						println("Result: \(Game.sharedGame().hand.evaluate())")
 				}
-			
-				self.updateElements(newState)
+			}
+		
+			self.updateElements(newState)
 		}
 	}
 
 	override func viewDidLayoutSubviews()  {
 		super.viewDidLayoutSubviews()
-		
+
 		self.performInitialLayout()
 	}
 
@@ -103,15 +112,15 @@ class ViewController: UIViewController {
 	func performInitialLayout() {
 		if !self.hasPerformedInitialLayout {
 			if self.cardViews == nil {
-				var cardViews = [CardView]();
+				var cardViews = [CardView]()
 				for cardTag in self.cCardViewTagStart..<self.cCardViewTagStart + 5 {
 					if var cardView = self.view.viewWithTag(cardTag) as? CardView {
 						cardViews.append(cardView)
 					}
 				}
 				
-				self.cardViews = cardViews;
-				self.updateElements(Game.sharedGame().state);
+				self.cardViews = cardViews
+				self.updateElements(Game.sharedGame().state)
 			}
 			self.positionCards(UIRectEdge.Left, animated: false, completion: nil)
 
@@ -123,35 +132,50 @@ class ViewController: UIViewController {
 	}
 	
 	func positionCards(position: UIRectEdge, animated: Bool = false, completion: (() -> ())?) {
-		var offset : CGFloat = 0.0
+		var offset			: CGFloat = 0.0
+		var animationDelay	: NSTimeInterval = 0.0
 		
 		if position != UIRectEdge.None {
+			animationDelay = CardView.RevealTime()
 			offset = CGRectGetWidth(self.cardContainer.frame)
 			
 			if position == UIRectEdge.Left {
 				offset *= -1.0
 			}
 		}
-		
-		self.hCardCenterConstraint.constant = offset;
+
+		self.hCardCenterConstraint.constant = offset
 		if animated {
-			UIView.animateWithDuration(0.3, animations: {
+			UIView.animateWithDuration(0.25, animations: {
 				self.cardContainer.layoutIfNeeded()
-			}, completion: {
-				(finished: Bool) -> () in
+			}, completion: { (finished: Bool) -> () in
+				if position != UIRectEdge.None {
+					self.hideAllCards()
+				}
 				if let completion = completion {
-					completion();
+					completion()
 				}
 			})
 		}
 		else {
+			if position != UIRectEdge.None {
+				self.hideAllCards()
+			}
 			self.cardContainer.layoutIfNeeded()
+		}
+	}
+	
+	func hideAllCards(animated: Bool = false) {
+		if let cardViews = self.cardViews {
+			for cardView in cardViews {
+				cardView.setRevealed(false, animated: animated)
+			}
 		}
 	}
 	
 	func updateElements(gameState: Game.State) {
 		switch gameState {
-			case Game.State.Ready:
+			case .Ready:
 				self.betMaxButton.enabled = true
 				self.betOneButton.enabled = true
 				self.dealDrawButton.enabled = Game.sharedGame().bet > 0
@@ -160,21 +184,36 @@ class ViewController: UIViewController {
 				self.betOneButton.enabled = false
 				self.dealDrawButton.enabled = true
 			case .Complete:
-				self.betMaxButton.enabled = false
-				self.betOneButton.enabled = false
+				self.betMaxButton.enabled = true
+				self.betOneButton.enabled = true
 				self.dealDrawButton.enabled = false
 		}
 		self.betLabel.text = String(Game.sharedGame().bet)
 	}
 	
 	// MARK: - Handlers
-	
+
 	@IBAction func handleBetOne(sender: AnyObject) {
-		Game.sharedGame().incrementBet(amount: 1)
+		if Game.sharedGame().state == Game.State.Complete {
+			self.positionCards(UIRectEdge.Left, animated: true, completion: {
+				Game.sharedGame().state = Game.State.Ready
+				Game.sharedGame().incrementBet(amount: 1)
+			})
+		}
+		else {
+			Game.sharedGame().incrementBet(amount: 1)
+		}
 	}
 
 	@IBAction func handleBetMax(sender: AnyObject) {
-		if Game.sharedGame().state == Game.State.Ready {
+		if Game.sharedGame().state == Game.State.Complete {
+			self.positionCards(UIRectEdge.Left, animated: true, completion: {
+				Game.sharedGame().state = Game.State.Ready
+				Game.sharedGame().betMax()
+				Game.sharedGame().deal()
+			})
+		}
+		else {
 			Game.sharedGame().betMax()
 			Game.sharedGame().deal()
 		}
@@ -186,24 +225,27 @@ class ViewController: UIViewController {
 				Game.sharedGame().deal()
 
 			case Game.State.Dealt:
-				Game.sharedGame().draw()
+				var hideCount		= 0
+				var dispatchTime	: Int64 = 0
+				
+				if let cardViews = self.cardViews {
+					for cardView in cardViews {
+						if let card = cardView.card {
+							if !card.hold {
+								hideCount++
+								cardView.setRevealed(false, animated: true)
+							}
+						}
+					}
+				}
+				
+				if hideCount > 0 {
+					dispatchTime = Int64((0.15 + CardView.RevealTime()) * Double(NSEC_PER_SEC))	// card flip + a little extra time to "think"
+				}
+				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, dispatchTime), dispatch_get_main_queue(), { Game.sharedGame().draw(); return })
 
 			case Game.State.Complete:
 				break
-		}
-	}
-
-	@IBAction func toggleHold(sender: AnyObject) {
-		let button = sender as? UIButton
-		
-		if let button = button {
-			var card	= Game.sharedGame().playerCardAt(button.tag - 1000)
-			
-			if var card = card {
-				card.hold = !card.hold
-				button.setTitle(card.hold ? "Discard" : "Hold", forState: UIControlState.Normal)
-				println("card: \(button.tag) hold: \(card.hold)")
-			}
 		}
 	}
 }
