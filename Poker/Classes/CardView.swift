@@ -10,13 +10,16 @@ import UIKit
 import QuartzCore
 
 class CardView: UIView {
-	@IBOutlet var cardImage	: UIImageView!
-	@IBOutlet var holdLabel	: UIView!
-	var enabled				: Bool = false
-	var card				: Card?
-	var revealed			: Bool = false
+	@IBOutlet var cardImage		: UIImageView!
+	@IBOutlet var holdLabel		: UIView!
+	@IBOutlet var topCardOffset	: NSLayoutConstraint!
+	var enabled					: Bool = false
+	var card					: Card?
+	var revealed				: Bool = false
+	let PinTime					: NSTimeInterval = 0.50
+	let UnpinOffset				: CGFloat = 16.0
 	
-	class func RevealTime() -> Double {
+	class func RevealTime() -> NSTimeInterval {
 		return 0.30
 	}
 	
@@ -65,6 +68,22 @@ class CardView: UIView {
 				self.update()
 			}
 		}
+	}
+	
+	func animatePinned() {
+		if let card = self.card {
+			if card.pin {
+				self.topCardOffset.constant = 0.0
+				UIView.animateWithDuration(self.PinTime, animations: {
+					self.layoutIfNeeded()
+				})
+			}
+		}
+	}
+	
+	func resetPinned() {
+		self.topCardOffset.constant = self.UnpinOffset
+		self.layoutIfNeeded()
 	}
 	
 	func handleTap(recognizer: UIGestureRecognizer) {

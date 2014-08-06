@@ -49,7 +49,6 @@ class ViewController: UIViewController {
 		}
 		
 		Game.sharedGame().stateHandler = { (newState: Game.State) -> () in
-println("newstate \(newState)")
 			// transitions here, while updateElements can be called at any point
 			if var cardViews = self.cardViews {
 				switch newState {
@@ -71,6 +70,10 @@ println("newstate \(newState)")
 							}
 						})
 					case .Complete:
+						var result			= Game.sharedGame().hand.evaluate()
+						var revealCount		= 0
+						var dispatchTime	: Int64 = 0
+						
 						for cardView in cardViews {
 							cardView.enabled = false
 							if !cardView.revealed {
@@ -78,14 +81,22 @@ println("newstate \(newState)")
 							
 								cardView.card = card
 								cardView.setRevealed(true, animated: true)
+								revealCount++;
 							}
 							else {
 								cardView.card?.hold = false
 								cardView.update()
 							}
 						}
-					
-						println("Result: \(Game.sharedGame().hand.evaluate())")
+						if revealCount > 0 {
+							// card flip + a slight pause to allow player a moment to recognize before we do
+							dispatchTime = Int64((0.25 + CardView.RevealTime()) * Double(NSEC_PER_SEC))
+						}
+						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, dispatchTime), dispatch_get_main_queue(), {
+							for cardView in cardViews {
+								cardView.animatePinned()
+							}
+						})
 				}
 			}
 		
@@ -150,7 +161,7 @@ println("newstate \(newState)")
 				self.cardContainer.layoutIfNeeded()
 			}, completion: { (finished: Bool) -> () in
 				if position != UIRectEdge.None {
-					self.hideAllCards()
+					self.resetAllCards()
 				}
 				if let completion = completion {
 					completion()
@@ -159,16 +170,17 @@ println("newstate \(newState)")
 		}
 		else {
 			if position != UIRectEdge.None {
-				self.hideAllCards()
+				self.resetAllCards()
 			}
 			self.cardContainer.layoutIfNeeded()
 		}
 	}
 	
-	func hideAllCards(animated: Bool = false) {
+	func resetAllCards(animated: Bool = false) {
 		if let cardViews = self.cardViews {
 			for cardView in cardViews {
 				cardView.setRevealed(false, animated: animated)
+				cardView.resetPinned()
 			}
 		}
 	}

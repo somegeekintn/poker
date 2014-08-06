@@ -172,6 +172,7 @@ class Hand : Printable {
 							category = Category.TwoPair
 						}
 						else if sortedRanks[0][0].rank >= Card.Rank.Jack {
+							sortedRanks[0].iterate { $0.pin = true }
 							category = Category.Pair
 						}
 					}
