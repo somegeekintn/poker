@@ -27,6 +27,8 @@ extension UIView {
 func == (lhs: UIRectEdge, rhs: UIRectEdge) -> Bool     { return lhs.toRaw() == rhs.toRaw() }
 
 class ViewController: UIViewController {
+	// MARK: - Variables
+
 	@IBOutlet var betLabel				: UILabel!
 	@IBOutlet var creditsLabel			: UILabel!
 	@IBOutlet var winLabel				: UILabel!
@@ -35,9 +37,8 @@ class ViewController: UIViewController {
 	@IBOutlet var betOneButton			: UIButton!
 	@IBOutlet var cardContainer			: UIView!
 	@IBOutlet var hCardCenterConstraint	: NSLayoutConstraint!
-	var hasPerformedInitialLayout		= false
 	var cardViews						: [CardView]?
-	let cCardViewTagStart				: Int = 1000
+	let kCardViewTagStart				: Int = 1000
 	
 	// MARK: - Lifecycle
 	
@@ -59,7 +60,7 @@ class ViewController: UIViewController {
 						}
 					case .Dealt:
 						for cardView in cardViews {
-							var card	= Game.sharedGame().playerCardAt(cardView.tag - self.cCardViewTagStart)
+							var card	= Game.sharedGame().playerCardAt(cardView.tag - self.kCardViewTagStart)
 							
 							cardView.card = card
 						}
@@ -77,11 +78,11 @@ class ViewController: UIViewController {
 						for cardView in cardViews {
 							cardView.enabled = false
 							if !cardView.revealed {
-								var card	= Game.sharedGame().playerCardAt(cardView.tag - self.cCardViewTagStart)
+								var card	= Game.sharedGame().playerCardAt(cardView.tag - self.kCardViewTagStart)
 							
 								cardView.card = card
 								cardView.setRevealed(true, animated: true)
-								revealCount++;
+								revealCount++
 							}
 							else {
 								cardView.card?.hold = false
@@ -102,14 +103,20 @@ class ViewController: UIViewController {
 		
 			self.updateElements(newState)
 		}
+
+		self.resetViews()
 	}
 
-	override func viewDidLayoutSubviews()  {
-		super.viewDidLayoutSubviews()
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
 
-		self.performInitialLayout()
+		self.positionCards(UIRectEdge.Left, animated: false, completion: nil)	// better place for this?
 	}
-
+	
+	override func preferredStatusBarStyle() -> UIStatusBarStyle {
+		return UIStatusBarStyle.LightContent
+	}
+	
 	override func shouldAutorotate() -> Bool {
 		return true
 	}
@@ -118,28 +125,22 @@ class ViewController: UIViewController {
 		return Int(UIInterfaceOrientationMask.Landscape.toRaw())
 	}
 	
-	// Needed because for some reason, all subviews aren't actually loaded in viewDidLoad
-	// Not sure if that's related to Swift or what exactly.
-	func performInitialLayout() {
-		if !self.hasPerformedInitialLayout {
-			if self.cardViews == nil {
-				var cardViews = [CardView]()
-				for cardTag in self.cCardViewTagStart..<self.cCardViewTagStart + 5 {
-					if var cardView = self.view.viewWithTag(cardTag) as? CardView {
-						cardViews.append(cardView)
-					}
+	func resetViews() {
+		if self.cardViews == nil {
+			var cardViews = [CardView]()
+			for cardTag in self.kCardViewTagStart..<self.kCardViewTagStart + 5 {
+				if var cardView = self.view.viewWithTag(cardTag) as? CardView {
+					cardViews.append(cardView)
+					cardView.update()
 				}
-				
-				self.cardViews = cardViews
-				self.updateElements(Game.sharedGame().state)
 			}
-			self.positionCards(UIRectEdge.Left, animated: false, completion: nil)
-
-			self.betLabel.text = "0"
-			self.creditsLabel.text = "0"
-			self.winLabel.text = "0"
-			self.hasPerformedInitialLayout = true
+			
+			self.cardViews = cardViews
+			self.updateElements(Game.sharedGame().state)
 		}
+		self.betLabel.text = "0"
+		self.creditsLabel.text = "0"
+		self.winLabel.text = "0"
 	}
 	
 	func positionCards(position: UIRectEdge, animated: Bool = false, completion: (() -> ())?) {
