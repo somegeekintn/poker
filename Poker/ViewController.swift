@@ -116,15 +116,15 @@ class ViewController: UIViewController {
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {
 		return UIStatusBarStyle.LightContent
 	}
-	
-	override func shouldAutorotate() -> Bool {
-		return true
-	}
-	
-	override func supportedInterfaceOrientations() -> Int {
-		return Int(UIInterfaceOrientationMask.Landscape.toRaw())
-	}
-	
+//	
+//	override func shouldAutorotate() -> Bool {
+//		return true
+//	}
+//	
+//	override func supportedInterfaceOrientations() -> Int {
+//		return Int(UIInterfaceOrientationMask.Landscape.toRaw())
+//	}
+//	
 	func resetViews() {
 		if self.cardViews == nil {
 			var cardViews = [CardView]()

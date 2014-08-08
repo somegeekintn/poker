@@ -12,7 +12,6 @@ import QuartzCore
 class CardView: UIView {
 	@IBOutlet var cardImage		: UIImageView!
 	@IBOutlet var holdLabel		: UIView!
-	@IBOutlet var topCardOffset	: NSLayoutConstraint!
 	var enabled					: Bool = false
 	var card					: Card?
 	var revealed				: Bool = false
@@ -66,18 +65,16 @@ class CardView: UIView {
 	
 	func animatePinned() {
 		if let card = self.card {
-			if card.pin {
-				self.topCardOffset.constant = 0.0
+			if !card.pin {
 				UIView.animateWithDuration(self.kPinTime, animations: {
-					self.layoutIfNeeded()
+					self.alpha = 0.40
 				})
 			}
 		}
 	}
 	
 	func resetPinned() {
-		self.topCardOffset.constant = self.kUnpinOffset
-		self.layoutIfNeeded()
+		self.alpha = 1.00
 	}
 	
 	func handleTap(recognizer: UIGestureRecognizer) {
