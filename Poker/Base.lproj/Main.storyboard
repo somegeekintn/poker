@@ -134,14 +134,41 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1sN-BA-m4t" userLabel="Draw">
+                                <rect key="frame" x="20" y="504" width="44" height="44"/>
+                                <state key="normal" image="btn_draw">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="handleDealDraw:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="01S-Dm-2lj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hea-hO-cP1" userLabel="Bet One">
+                                <rect key="frame" x="256" y="504" width="44" height="44"/>
+                                <state key="normal" image="btn_bet_one">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="handleBetOne:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="RQC-aO-dPK"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faE-rP-ifz" userLabel="Bet Max">
+                                <rect key="frame" x="192" y="504" width="44" height="44"/>
+                                <state key="normal" image="btn_bet_max">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="handleBetMax:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="awt-Yz-s5s"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7u3-KI-aKi" userLabel="Card Container">
-                                <rect key="frame" x="0.0" y="235" width="320" height="98"/>
+                                <rect key="frame" x="0.0" y="232" width="320" height="104"/>
                                 <subviews>
                                     <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lK3-UH-f8V" customClass="CardView" customModule="Poker" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="0.0" width="52" height="98"/>
+                                        <rect key="frame" x="10" y="0.0" width="56" height="104"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WgJ-we-5P5">
-                                                <rect key="frame" x="4" y="0.0" width="44" height="21"/>
+                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="XfJ-zC-rDZ"/>
@@ -152,7 +179,7 @@
                                                 <size key="shadowOffset" width="2" height="2"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="Zu2-xY-WWg" userLabel="Card Image">
-                                                <rect key="frame" x="0.0" y="24" width="52" height="74"/>
+                                                <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
                                         </subviews>
                                         <constraints>
@@ -165,7 +192,7 @@
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
                                             <constraint firstAttribute="bottom" secondItem="Zu2-xY-WWg" secondAttribute="bottom" id="Xox-Fl-UTF"/>
-                                            <constraint firstAttribute="width" constant="52" id="eRI-tk-6Qw"/>
+                                            <constraint firstAttribute="width" constant="56" id="eRI-tk-6Qw"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
                                             <mask key="subviews">
@@ -185,13 +212,13 @@
                                         </connections>
                                     </view>
                                     <view tag="1001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sgO-PU-DGg" customClass="CardView" customModule="Poker" customModuleProvider="target">
-                                        <rect key="frame" x="77" y="0.0" width="52" height="98"/>
+                                        <rect key="frame" x="71" y="0.0" width="56" height="104"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="AVy-v0-MHe" userLabel="Card Image">
-                                                <rect key="frame" x="0.0" y="24" width="52" height="74"/>
+                                                <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="us6-mf-hfD">
-                                                <rect key="frame" x="4" y="0.0" width="44" height="21"/>
+                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="HGf-os-T1D"/>
@@ -204,7 +231,7 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="centerX" secondItem="AVy-v0-MHe" secondAttribute="centerX" id="Arv-LQ-Rg2"/>
-                                            <constraint firstAttribute="width" constant="52" id="D7l-XU-HMM"/>
+                                            <constraint firstAttribute="width" constant="56" id="D7l-XU-HMM"/>
                                             <constraint firstAttribute="trailing" secondItem="us6-mf-hfD" secondAttribute="trailing" constant="4" id="Pha-Qg-AKp">
                                                 <variation key="heightClass=compact" constant="0.0"/>
                                             </constraint>
@@ -232,13 +259,13 @@
                                         </connections>
                                     </view>
                                     <view tag="1002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9ox-6k-e1p" customClass="CardView" customModule="Poker" customModuleProvider="target">
-                                        <rect key="frame" x="134" y="0.0" width="52" height="98"/>
+                                        <rect key="frame" x="132" y="0.0" width="56" height="104"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="ty3-97-0Ch" userLabel="Card Image">
-                                                <rect key="frame" x="0.0" y="24" width="52" height="74"/>
+                                                <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nlf-rq-Fke">
-                                                <rect key="frame" x="4" y="0.0" width="44" height="21"/>
+                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="WAg-Mt-NVY"/>
@@ -250,7 +277,7 @@
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="52" id="6EW-tt-PoE"/>
+                                            <constraint firstAttribute="width" constant="56" id="6EW-tt-PoE"/>
                                             <constraint firstAttribute="centerX" secondItem="ty3-97-0Ch" secondAttribute="centerX" id="9cZ-Va-xJm"/>
                                             <constraint firstAttribute="bottom" secondItem="ty3-97-0Ch" secondAttribute="bottom" id="jam-e5-rHV"/>
                                             <constraint firstItem="Nlf-rq-Fke" firstAttribute="leading" secondItem="9ox-6k-e1p" secondAttribute="leading" constant="4" id="tYA-Ks-bJ2">
@@ -279,13 +306,13 @@
                                         </connections>
                                     </view>
                                     <view tag="1003" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="94Y-5k-m0V" customClass="CardView" customModule="Poker" customModuleProvider="target">
-                                        <rect key="frame" x="191" y="0.0" width="52" height="98"/>
+                                        <rect key="frame" x="193" y="0.0" width="56" height="104"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="suf-WP-vrd" userLabel="Card Image">
-                                                <rect key="frame" x="0.0" y="24" width="52" height="74"/>
+                                                <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ye9-O9-vSx">
-                                                <rect key="frame" x="4" y="0.0" width="44" height="21"/>
+                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="vg1-NP-HCg"/>
@@ -305,7 +332,7 @@
                                             </constraint>
                                             <constraint firstItem="Ye9-O9-vSx" firstAttribute="top" secondItem="94Y-5k-m0V" secondAttribute="top" id="I38-1q-Yb8"/>
                                             <constraint firstAttribute="centerX" secondItem="suf-WP-vrd" secondAttribute="centerX" id="iJL-Xw-F0J"/>
-                                            <constraint firstAttribute="width" constant="52" id="uxl-PW-LVi"/>
+                                            <constraint firstAttribute="width" constant="56" id="uxl-PW-LVi"/>
                                             <constraint firstAttribute="bottom" secondItem="suf-WP-vrd" secondAttribute="bottom" id="xYY-Gs-e4y"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
@@ -326,13 +353,13 @@
                                         </connections>
                                     </view>
                                     <view tag="1004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6pe-JB-fcz" customClass="CardView" customModule="Poker" customModuleProvider="target">
-                                        <rect key="frame" x="248" y="0.0" width="52" height="98"/>
+                                        <rect key="frame" x="254" y="0.0" width="56" height="104"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="etF-cD-aY3" userLabel="Card Image">
-                                                <rect key="frame" x="0.0" y="24" width="52" height="74"/>
+                                                <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wdB-vt-USL">
-                                                <rect key="frame" x="4" y="0.0" width="44" height="21"/>
+                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="0Yg-8E-gnS"/>
@@ -353,7 +380,7 @@
                                             </constraint>
                                             <constraint firstItem="wdB-vt-USL" firstAttribute="top" secondItem="6pe-JB-fcz" secondAttribute="top" id="Q5e-QQ-F11"/>
                                             <constraint firstAttribute="centerX" secondItem="etF-cD-aY3" secondAttribute="centerX" id="Vd5-fF-r7T"/>
-                                            <constraint firstAttribute="width" constant="52" id="wXT-dY-rT5"/>
+                                            <constraint firstAttribute="width" constant="56" id="wXT-dY-rT5"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
                                             <mask key="subviews">
@@ -378,7 +405,7 @@
                                     <constraint firstItem="sgO-PU-DGg" firstAttribute="leading" secondItem="lK3-UH-f8V" secondAttribute="trailing" constant="5" id="54S-TE-Eom"/>
                                     <constraint firstItem="94Y-5k-m0V" firstAttribute="leading" secondItem="9ox-6k-e1p" secondAttribute="trailing" constant="5" id="BFW-Dm-Mf9"/>
                                     <constraint firstItem="lK3-UH-f8V" firstAttribute="top" secondItem="7u3-KI-aKi" secondAttribute="top" id="BUS-ZL-Qn0"/>
-                                    <constraint firstAttribute="height" constant="98" id="I7G-Ab-UBe"/>
+                                    <constraint firstAttribute="height" constant="104" id="I7G-Ab-UBe"/>
                                     <constraint firstAttribute="bottom" secondItem="6pe-JB-fcz" secondAttribute="bottom" id="J8b-WV-yX4"/>
                                     <constraint firstAttribute="bottom" secondItem="94Y-5k-m0V" secondAttribute="bottom" id="Zc6-Df-alz"/>
                                     <constraint firstAttribute="bottom" secondItem="lK3-UH-f8V" secondAttribute="bottom" id="b2f-V4-eRs"/>
@@ -419,33 +446,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1sN-BA-m4t" userLabel="Draw">
-                                <rect key="frame" x="20" y="504" width="44" height="44"/>
-                                <state key="normal" image="btn_draw">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="handleDealDraw:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="01S-Dm-2lj"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hea-hO-cP1" userLabel="Bet One">
-                                <rect key="frame" x="256" y="504" width="44" height="44"/>
-                                <state key="normal" image="btn_bet_one">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="handleBetOne:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="RQC-aO-dPK"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faE-rP-ifz" userLabel="Bet Max">
-                                <rect key="frame" x="192" y="504" width="44" height="44"/>
-                                <state key="normal" image="btn_bet_max">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="handleBetMax:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="awt-Yz-s5s"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.072253309190273285" green="0.048322334885597229" blue="0.48611778020858765" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -471,10 +471,10 @@
                         <variation key="heightClass=compact">
                             <mask key="subviews">
                                 <include reference="ZcT-Ro-dUI"/>
-                                <include reference="7u3-KI-aKi"/>
                                 <include reference="1sN-BA-m4t"/>
                                 <include reference="hea-hO-cP1"/>
                                 <include reference="faE-rP-ifz"/>
+                                <include reference="7u3-KI-aKi"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="jnE-Uy-KiK"/>
@@ -513,6 +513,6 @@
         <image name="btn_bet_max" width="44" height="44"/>
         <image name="btn_bet_one" width="44" height="44"/>
         <image name="btn_draw" width="44" height="44"/>
-        <image name="card_back" width="52" height="74"/>
+        <image name="card_back" width="56" height="80"/>
     </resources>
 </document>
