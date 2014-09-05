@@ -22,7 +22,7 @@ class CardView: UIView {
 		return 0.30
 	}
 	
-	required init(coder aDecoder: NSCoder!) {
+	required init(coder aDecoder: NSCoder) {
 		var tapRecognizer	: UITapGestureRecognizer
 		
 		super.init(coder: aDecoder)
