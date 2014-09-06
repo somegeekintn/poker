@@ -116,15 +116,7 @@ class ViewController: UIViewController {
 	override func preferredStatusBarStyle() -> UIStatusBarStyle {
 		return UIStatusBarStyle.LightContent
 	}
-//	
-//	override func shouldAutorotate() -> Bool {
-//		return true
-//	}
-//	
-//	override func supportedInterfaceOrientations() -> Int {
-//		return Int(UIInterfaceOrientationMask.Landscape.toRaw())
-//	}
-//	
+
 	func resetViews() {
 		if self.cardViews == nil {
 			var cardViews = [CardView]()
@@ -138,9 +130,10 @@ class ViewController: UIViewController {
 			self.cardViews = cardViews
 			self.updateElements(Game.sharedGame().state)
 		}
-		self.betLabel.text = "0"
-		self.creditsLabel.text = "0"
-		self.winLabel.text = "0"
+		
+		self.betLabel.text = String(Game.sharedGame().bet)
+		self.creditsLabel.text = String(Game.sharedGame().credits)
+		self.winLabel.text = String(Game.sharedGame().lastWin)
 	}
 	
 	func positionCards(position: UIRectEdge, animated: Bool = false, completion: (() -> ())?) {
@@ -202,6 +195,8 @@ class ViewController: UIViewController {
 				self.dealDrawButton.enabled = false
 		}
 		self.betLabel.text = String(Game.sharedGame().bet)
+		self.creditsLabel.text = String(Game.sharedGame().credits)
+		self.winLabel.text = String(Game.sharedGame().lastWin)
 	}
 	
 	// MARK: - Handlers

@@ -18,6 +18,7 @@
 		C98CED74196CA00400345454 /* Hand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98CED73196CA00400345454 /* Hand.swift */; };
 		C99C7E2D19745B2C00920F0A /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99C7E2C19745B2C00920F0A /* Game.swift */; };
 		C9A5A88B1965F83A00F5D4CC /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A5A88A1965F83A00F5D4CC /* Deck.swift */; };
+		C9BA48BB19BA3EC500FEBA30 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BA48BA19BA3EC500FEBA30 /* GameData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		C98CED73196CA00400345454 /* Hand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Hand.swift; path = Classes/Hand.swift; sourceTree = "<group>"; };
 		C99C7E2C19745B2C00920F0A /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Game.swift; path = Classes/Game.swift; sourceTree = "<group>"; };
 		C9A5A88A1965F83A00F5D4CC /* Deck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Deck.swift; path = Classes/Deck.swift; sourceTree = "<group>"; };
+		C9BA48BA19BA3EC500FEBA30 /* GameData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameData.swift; path = Classes/GameData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				C98793171964AC870063587F /* Card.swift */,
 				C952C09A1990ECCA006FF990 /* CardView.swift */,
 				C99C7E2C19745B2C00920F0A /* Game.swift */,
+				C9BA48BA19BA3EC500FEBA30 /* GameData.swift */,
 				C9A5A88A1965F83A00F5D4CC /* Deck.swift */,
 				C98CED73196CA00400345454 /* Hand.swift */,
 				C98792FC1964AB840063587F /* ViewController.swift */,
@@ -233,6 +236,7 @@
 				C9A5A88B1965F83A00F5D4CC /* Deck.swift in Sources */,
 				C98792FB1964AB840063587F /* Poker.xcdatamodeld in Sources */,
 				C952C09B1990ECCA006FF990 /* CardView.swift in Sources */,
+				C9BA48BB19BA3EC500FEBA30 /* GameData.swift in Sources */,
 				C98793181964AC870063587F /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -349,10 +353,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Poker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -361,6 +367,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Poker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

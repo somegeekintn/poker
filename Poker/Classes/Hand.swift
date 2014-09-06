@@ -239,5 +239,39 @@ class Hand : Printable {
 				}
 			}
 		}
+		
+		func payoutForBet(bet: Int) -> Int {
+			var payout = 0;
+			
+			switch self {
+				case .None:
+					payout = 0
+				case .Pair:
+					payout = 1
+				case .TwoPair:
+					payout = 2
+				case .ThreeOfAKind:
+					payout = 3
+				case .Straight:
+					payout = 4
+				case .Flush:
+					payout = 6
+				case .FullHouse:
+					payout = 9
+				case .FourOfAKind:
+					payout = 25
+				case .StraightFlush:
+					payout = 50
+				case .RoyalFlush:
+					payout = 250
+			}
+			
+			payout *= bet
+			if self == .RoyalFlush && bet == 5 {
+				payout = 4000
+			}
+			
+			return payout
+		}
 	}
 }

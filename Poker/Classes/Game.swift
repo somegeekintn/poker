@@ -14,8 +14,10 @@ class Game : Printable {
 
 	var deck			= Deck()
 	var hand			= Hand()
+	var gameData		: GameData?
 	var betHandler		: betCallback? = nil
 	var stateHandler	: stateCallback? = nil
+	var lastWin			: Int = 0
 	
 	class func sharedGame() -> Game! {
 		struct Static {
@@ -47,6 +49,27 @@ class Game : Printable {
 		}
 	}
 	
+	var state : State = State.Ready {
+		willSet(newValue) {
+			if newValue == State.Ready {
+				self.lastWin = 0
+			}
+			if var stateHandler = self.stateHandler {
+				stateHandler(newState: newValue)
+			}
+		}
+	}
+	
+	var credits : Int {
+		var credits = 0
+		
+		if let gameData = self.gameData {
+			credits = gameData.credits.integerValue
+		}
+		
+		return credits
+	}
+	
 	var actualBet : Int = 0 {
 		didSet(oldValue) {
 			if var betHandler = self.betHandler {
@@ -55,24 +78,23 @@ class Game : Printable {
 		}
 	}
 	
-	var state : State = State.Ready {
-		willSet(newValue) {
-			if var stateHandler = self.stateHandler {
-				stateHandler(newState: newValue)
-			}
-		}
-	}
-	
     var bet : Int {
 		// Swift's handling of getters / setters leaves something to be desired
 		set (newValue) {
 			var actualValue		= (newValue > Game.maxBet()) ? Game.maxBet() : newValue
+			var betDelta		= actualValue - self.actualBet
+			
+			if (betDelta > self.credits) {
+				actualValue -= betDelta - self.credits
+				betDelta = actualValue - self.actualBet
+			}
 			
 			if actualValue > 0 && self.state == State.Complete {
 				self.state = State.Ready
 			}
 			
 			if self.actualBet != actualValue {
+				self.gameData?.betCredits(betDelta)
 				self.actualBet = actualValue
 			}
 		}
@@ -89,6 +111,7 @@ class Game : Printable {
 	}
 	
 	required init() {
+		self.gameData = GameData.gameData()
 	}
 	
 	// MARK: - Betting
@@ -110,7 +133,7 @@ class Game : Printable {
 	func deal() -> Bool {
 		var dealt	: Bool = false
 		
-		if (self.canDeal) {
+		if self.canDeal {
 			self.deck.shuffle()
 			self.hand.initialDrawFromDeck(self.deck)
 			self.state = State.Dealt
@@ -123,10 +146,18 @@ class Game : Printable {
 	func draw() -> Bool {
 		var drew	: Bool = false
 		
-		if (self.state == State.Dealt) {
+		if self.state == State.Dealt {
+			var winAmount		= 0
+			var handCategory	: Hand.Category
+			
 			self.hand.drawFromDeck(self.deck)
+			handCategory = self.hand.evaluate()
+			self.lastWin = handCategory.payoutForBet(self.actualBet)
+			if self.lastWin > 0 {
+				self.gameData?.winCredits(self.lastWin)
+			}
 			self.state = State.Complete
-			self.bet = 0
+			self.actualBet = 0
 			drew = true
 		}
 		
