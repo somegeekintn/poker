@@ -1,174 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Game Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="Poker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="GameController" customModule="Poker" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZcT-Ro-dUI" userLabel="Info Container">
-                                <rect key="frame" x="20" y="20" width="300" height="52"/>
-                                <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Bet" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="caR-N6-MmH">
-                                        <rect key="frame" x="109" y="4" width="64" height="24"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="5Ey-05-TYh"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="18"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <size key="shadowOffset" width="2" height="2"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="5" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oKH-tb-4Cz">
-                                        <rect key="frame" x="109" y="28" width="64" height="24"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="Uvy-oC-n24"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="18"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <size key="shadowOffset" width="2" height="2"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Credit" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGS-2P-nCR">
-                                        <rect key="frame" x="0.0" y="4" width="64" height="24"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="DWg-5g-ujp"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="18"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <size key="shadowOffset" width="2" height="2"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="10,000" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AnZ-Gh-nXN">
-                                        <rect key="frame" x="0.0" y="28" width="64" height="24"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="2cb-D9-pMQ"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="18"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <size key="shadowOffset" width="2" height="2"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Win" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SKO-jq-7I7">
-                                        <rect key="frame" x="236" y="4" width="64" height="24"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="AW6-3f-w2F"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="18"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <size key="shadowOffset" width="2" height="2"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="4,000" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8do-sn-PpI">
-                                        <rect key="frame" x="236" y="28" width="64" height="24"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="fZz-Id-J3t"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Futura-MediumItalic" family="Futura" pointSize="18"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <size key="shadowOffset" width="2" height="2"/>
-                                    </label>
-                                </subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SUF-BQ-GYg" userLabel="Pay Table" customClass="PayTableView" customModule="Poker" customModuleProvider="target">
+                                <rect key="frame" x="4" y="20" width="312" height="180"/>
+                                <color key="backgroundColor" red="0.0060464823618531227" green="0.10786426067352295" blue="0.23367637395858765" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="AnZ-Gh-nXN" firstAttribute="leading" secondItem="ZcT-Ro-dUI" secondAttribute="leading" id="40Y-fo-s19"/>
-                                    <constraint firstItem="8do-sn-PpI" firstAttribute="top" secondItem="SKO-jq-7I7" secondAttribute="bottom" id="9QC-hI-R9t"/>
-                                    <constraint firstAttribute="centerX" secondItem="oKH-tb-4Cz" secondAttribute="centerX" constant="9" id="GUu-sd-4vv">
-                                        <variation key="heightClass=compact" constant="0.0"/>
-                                    </constraint>
-                                    <constraint firstAttribute="bottom" secondItem="8do-sn-PpI" secondAttribute="bottom" id="VRw-lU-N78"/>
-                                    <constraint firstItem="oKH-tb-4Cz" firstAttribute="top" secondItem="caR-N6-MmH" secondAttribute="bottom" id="c0M-5X-yj9"/>
-                                    <constraint firstItem="AnZ-Gh-nXN" firstAttribute="top" secondItem="OGS-2P-nCR" secondAttribute="bottom" id="dHY-Rk-hb6"/>
-                                    <constraint firstAttribute="bottom" secondItem="AnZ-Gh-nXN" secondAttribute="bottom" id="e8m-n6-vBh"/>
-                                    <constraint firstAttribute="trailing" secondItem="SKO-jq-7I7" secondAttribute="trailing" id="fyx-gv-bAJ"/>
-                                    <constraint firstItem="OGS-2P-nCR" firstAttribute="leading" secondItem="ZcT-Ro-dUI" secondAttribute="leading" id="hs2-OW-zg7"/>
-                                    <constraint firstAttribute="trailing" secondItem="8do-sn-PpI" secondAttribute="trailing" id="jKY-4V-1k3"/>
-                                    <constraint firstAttribute="centerX" secondItem="caR-N6-MmH" secondAttribute="centerX" constant="9" id="tSV-jm-4xL">
-                                        <variation key="heightClass=compact" constant="0.0"/>
-                                    </constraint>
-                                    <constraint firstItem="SKO-jq-7I7" firstAttribute="top" secondItem="ZcT-Ro-dUI" secondAttribute="top" constant="4" id="uC6-9b-1OG">
-                                        <variation key="heightClass=compact" constant="0.0"/>
-                                    </constraint>
-                                    <constraint firstAttribute="bottom" secondItem="oKH-tb-4Cz" secondAttribute="bottom" id="xTS-lx-Aha"/>
+                                    <constraint firstAttribute="height" constant="180" id="tVh-BU-aUj"/>
                                 </constraints>
-                                <variation key="heightClass=compact">
-                                    <mask key="subviews">
-                                        <include reference="caR-N6-MmH"/>
-                                        <include reference="oKH-tb-4Cz"/>
-                                        <include reference="OGS-2P-nCR"/>
-                                        <include reference="AnZ-Gh-nXN"/>
-                                        <include reference="SKO-jq-7I7"/>
-                                        <include reference="8do-sn-PpI"/>
-                                    </mask>
-                                    <mask key="constraints">
-                                        <include reference="hs2-OW-zg7"/>
-                                        <include reference="40Y-fo-s19"/>
-                                        <include reference="dHY-Rk-hb6"/>
-                                        <include reference="e8m-n6-vBh"/>
-                                        <include reference="tSV-jm-4xL"/>
-                                        <include reference="GUu-sd-4vv"/>
-                                        <include reference="c0M-5X-yj9"/>
-                                        <include reference="xTS-lx-Aha"/>
-                                        <include reference="fyx-gv-bAJ"/>
-                                        <include reference="uC6-9b-1OG"/>
-                                        <include reference="9QC-hI-R9t"/>
-                                        <include reference="VRw-lU-N78"/>
-                                        <include reference="jKY-4V-1k3"/>
-                                    </mask>
-                                </variation>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1sN-BA-m4t" userLabel="Draw">
-                                <rect key="frame" x="20" y="504" width="44" height="44"/>
-                                <state key="normal" image="btn_draw">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="handleDealDraw:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="01S-Dm-2lj"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hea-hO-cP1" userLabel="Bet One">
-                                <rect key="frame" x="256" y="504" width="44" height="44"/>
-                                <state key="normal" image="btn_bet_one">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="handleBetOne:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="RQC-aO-dPK"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faE-rP-ifz" userLabel="Bet Max">
-                                <rect key="frame" x="192" y="504" width="44" height="44"/>
-                                <state key="normal" image="btn_bet_max">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="handleBetMax:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="awt-Yz-s5s"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7u3-KI-aKi" userLabel="Card Container">
-                                <rect key="frame" x="0.0" y="232" width="320" height="104"/>
+                                <rect key="frame" x="0.0" y="220" width="320" height="104"/>
                                 <subviews>
                                     <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lK3-UH-f8V" customClass="CardView" customModule="Poker" customModuleProvider="target">
                                         <rect key="frame" x="10" y="0.0" width="56" height="104"/>
                                         <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WgJ-we-5P5">
-                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="HELD" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WgJ-we-5P5">
+                                                <rect key="frame" x="4" y="0.0" width="48" height="22"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="XfJ-zC-rDZ"/>
@@ -176,7 +38,8 @@
                                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
-                                                <size key="shadowOffset" width="2" height="2"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="Zu2-xY-WWg" userLabel="Card Image">
                                                 <rect key="frame" x="0.0" y="24" width="56" height="80"/>
@@ -195,10 +58,6 @@
                                             <constraint firstAttribute="width" constant="56" id="eRI-tk-6Qw"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
-                                            <mask key="subviews">
-                                                <include reference="WgJ-we-5P5"/>
-                                                <include reference="Zu2-xY-WWg"/>
-                                            </mask>
                                             <mask key="constraints">
                                                 <include reference="eRI-tk-6Qw"/>
                                                 <include reference="JkL-Bm-IAm"/>
@@ -217,8 +76,8 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="AVy-v0-MHe" userLabel="Card Image">
                                                 <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="us6-mf-hfD">
-                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="HELD" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="us6-mf-hfD">
+                                                <rect key="frame" x="4" y="0.0" width="48" height="22"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="HGf-os-T1D"/>
@@ -226,7 +85,8 @@
                                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
-                                                <size key="shadowOffset" width="2" height="2"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
                                             </label>
                                         </subviews>
                                         <constraints>
@@ -242,10 +102,6 @@
                                             <constraint firstItem="us6-mf-hfD" firstAttribute="top" secondItem="sgO-PU-DGg" secondAttribute="top" id="zxh-cY-Pwz"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
-                                            <mask key="subviews">
-                                                <include reference="AVy-v0-MHe"/>
-                                                <include reference="us6-mf-hfD"/>
-                                            </mask>
                                             <mask key="constraints">
                                                 <include reference="D7l-XU-HMM"/>
                                                 <include reference="Pha-Qg-AKp"/>
@@ -264,8 +120,8 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="ty3-97-0Ch" userLabel="Card Image">
                                                 <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nlf-rq-Fke">
-                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="HELD" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nlf-rq-Fke">
+                                                <rect key="frame" x="4" y="0.0" width="48" height="22"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="WAg-Mt-NVY"/>
@@ -273,7 +129,8 @@
                                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
-                                                <size key="shadowOffset" width="2" height="2"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
                                             </label>
                                         </subviews>
                                         <constraints>
@@ -289,10 +146,6 @@
                                             <constraint firstItem="Nlf-rq-Fke" firstAttribute="top" secondItem="9ox-6k-e1p" secondAttribute="top" id="w4X-aJ-C3p"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
-                                            <mask key="subviews">
-                                                <include reference="ty3-97-0Ch"/>
-                                                <include reference="Nlf-rq-Fke"/>
-                                            </mask>
                                             <mask key="constraints">
                                                 <include reference="6EW-tt-PoE"/>
                                                 <include reference="tYA-Ks-bJ2"/>
@@ -311,8 +164,8 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="suf-WP-vrd" userLabel="Card Image">
                                                 <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ye9-O9-vSx">
-                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="HELD" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ye9-O9-vSx">
+                                                <rect key="frame" x="4" y="0.0" width="48" height="22"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="vg1-NP-HCg"/>
@@ -320,7 +173,8 @@
                                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
-                                                <size key="shadowOffset" width="2" height="2"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
                                             </label>
                                         </subviews>
                                         <constraints>
@@ -336,10 +190,6 @@
                                             <constraint firstAttribute="bottom" secondItem="suf-WP-vrd" secondAttribute="bottom" id="xYY-Gs-e4y"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
-                                            <mask key="subviews">
-                                                <include reference="suf-WP-vrd"/>
-                                                <include reference="Ye9-O9-vSx"/>
-                                            </mask>
                                             <mask key="constraints">
                                                 <include reference="uxl-PW-LVi"/>
                                                 <include reference="4M6-si-YDu"/>
@@ -358,8 +208,8 @@
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back" translatesAutoresizingMaskIntoConstraints="NO" id="etF-cD-aY3" userLabel="Card Image">
                                                 <rect key="frame" x="0.0" y="24" width="56" height="80"/>
                                             </imageView>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Hold" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wdB-vt-USL">
-                                                <rect key="frame" x="4" y="0.0" width="48" height="21"/>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="HELD" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wdB-vt-USL">
+                                                <rect key="frame" x="4" y="0.0" width="48" height="22"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="0Yg-8E-gnS"/>
@@ -367,7 +217,8 @@
                                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
-                                                <size key="shadowOffset" width="2" height="2"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
                                             </label>
                                         </subviews>
                                         <constraints>
@@ -383,10 +234,6 @@
                                             <constraint firstAttribute="width" constant="56" id="wXT-dY-rT5"/>
                                         </constraints>
                                         <variation key="heightClass=compact">
-                                            <mask key="subviews">
-                                                <include reference="etF-cD-aY3"/>
-                                                <include reference="wdB-vt-USL"/>
-                                            </mask>
                                             <mask key="constraints">
                                                 <include reference="wXT-dY-rT5"/>
                                                 <include reference="1T7-qu-xTX"/>
@@ -420,13 +267,6 @@
                                     <constraint firstAttribute="bottom" secondItem="9ox-6k-e1p" secondAttribute="bottom" id="z8g-c3-Qay"/>
                                 </constraints>
                                 <variation key="heightClass=compact">
-                                    <mask key="subviews">
-                                        <include reference="lK3-UH-f8V"/>
-                                        <include reference="sgO-PU-DGg"/>
-                                        <include reference="9ox-6k-e1p"/>
-                                        <include reference="94Y-5k-m0V"/>
-                                        <include reference="6pe-JB-fcz"/>
-                                    </mask>
                                     <mask key="constraints">
                                         <include reference="I7G-Ab-UBe"/>
                                         <include reference="b2f-V4-eRs"/>
@@ -446,53 +286,152 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZcT-Ro-dUI" userLabel="Info Container">
+                                <rect key="frame" x="20" y="352" width="280" height="44"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k1T-zY-1ck" userLabel="Bet Container">
+                                        <rect key="frame" x="118" y="0.0" width="45" height="24"/>
+                                        <subviews>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="BET" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="caR-N6-MmH">
+                                                <rect key="frame" x="0.0" y="0.0" width="29" height="24"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="5" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oKH-tb-4Cz">
+                                                <rect key="frame" x="33" y="0.0" width="12" height="24"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="caR-N6-MmH" firstAttribute="leading" secondItem="k1T-zY-1ck" secondAttribute="leading" id="0xH-td-LgD"/>
+                                            <constraint firstItem="caR-N6-MmH" firstAttribute="top" secondItem="k1T-zY-1ck" secondAttribute="top" id="37A-LM-AMF"/>
+                                            <constraint firstItem="oKH-tb-4Cz" firstAttribute="top" secondItem="k1T-zY-1ck" secondAttribute="top" id="41w-qC-znB"/>
+                                            <constraint firstItem="oKH-tb-4Cz" firstAttribute="leading" secondItem="caR-N6-MmH" secondAttribute="trailing" constant="4" id="GJi-z9-pCR"/>
+                                            <constraint firstAttribute="bottom" secondItem="caR-N6-MmH" secondAttribute="bottom" id="Y6F-sI-zHK"/>
+                                            <constraint firstAttribute="trailing" secondItem="oKH-tb-4Cz" secondAttribute="trailing" id="ZO1-ur-JZt"/>
+                                            <constraint firstAttribute="bottom" secondItem="oKH-tb-4Cz" secondAttribute="bottom" id="dFO-VQ-HQn"/>
+                                        </constraints>
+                                    </view>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="WIN" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SKO-jq-7I7">
+                                        <rect key="frame" x="0.0" y="24" width="32" height="20"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                        <color key="textColor" red="0.99695426225662231" green="0.84665507078170776" blue="0.15727213025093079" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="1" height="1"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="4,000" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8do-sn-PpI">
+                                        <rect key="frame" x="36" y="24" width="40" height="20"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                        <color key="textColor" red="0.99695426225662231" green="0.84665507078170776" blue="0.15727213025093079" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="1" height="1"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="CREDITS" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGS-2P-nCR">
+                                        <rect key="frame" x="223" y="24" width="57" height="20"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                        <color key="textColor" red="0.99695426225662231" green="0.84665507078170776" blue="0.15727213025093079" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="1" height="1"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="10,000" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AnZ-Gh-nXN">
+                                        <rect key="frame" x="171" y="24" width="48" height="20"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                        <color key="textColor" red="0.99695426225662231" green="0.84665507078170776" blue="0.15727213025093079" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="shadowOffset" width="1" height="1"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="OGS-2P-nCR" firstAttribute="leading" secondItem="AnZ-Gh-nXN" secondAttribute="trailing" constant="4" id="4DZ-ox-v9P"/>
+                                    <constraint firstAttribute="trailing" secondItem="OGS-2P-nCR" secondAttribute="trailing" id="EKb-XB-Xll"/>
+                                    <constraint firstAttribute="bottom" secondItem="AnZ-Gh-nXN" secondAttribute="bottom" id="Gg9-qX-dI8"/>
+                                    <constraint firstItem="8do-sn-PpI" firstAttribute="leading" secondItem="SKO-jq-7I7" secondAttribute="trailing" constant="4" id="O9U-7d-HhP"/>
+                                    <constraint firstItem="k1T-zY-1ck" firstAttribute="top" secondItem="ZcT-Ro-dUI" secondAttribute="top" id="TID-Ft-YQH"/>
+                                    <constraint firstAttribute="bottom" secondItem="SKO-jq-7I7" secondAttribute="bottom" id="WtG-lq-W3E"/>
+                                    <constraint firstItem="SKO-jq-7I7" firstAttribute="top" secondItem="k1T-zY-1ck" secondAttribute="bottom" id="Zyu-wA-U6o"/>
+                                    <constraint firstItem="SKO-jq-7I7" firstAttribute="leading" secondItem="ZcT-Ro-dUI" secondAttribute="leading" id="g1Z-sz-Oay"/>
+                                    <constraint firstAttribute="centerX" secondItem="k1T-zY-1ck" secondAttribute="centerX" id="oOg-Ac-6Rf"/>
+                                    <constraint firstAttribute="bottom" secondItem="8do-sn-PpI" secondAttribute="bottom" id="q6Y-QJ-B1h"/>
+                                    <constraint firstAttribute="bottom" secondItem="OGS-2P-nCR" secondAttribute="bottom" id="xKJ-Yd-Bu8"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1sN-BA-m4t" userLabel="Draw">
+                                <rect key="frame" x="20" y="416" width="44" height="44"/>
+                                <state key="normal" image="btn_draw">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="handleDealDraw:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="01S-Dm-2lj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hea-hO-cP1" userLabel="Bet One">
+                                <rect key="frame" x="256" y="416" width="44" height="44"/>
+                                <state key="normal" image="btn_bet_one">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="handleBetOne:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="RQC-aO-dPK"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faE-rP-ifz" userLabel="Bet Max">
+                                <rect key="frame" x="192" y="416" width="44" height="44"/>
+                                <state key="normal" image="btn_bet_max">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="handleBetMax:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="awt-Yz-s5s"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.072253309190273285" green="0.048322334885597229" blue="0.48611778020858765" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.034465715289115906" green="0.30706605315208435" blue="0.75436335802078247" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="SUF-BQ-GYg" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="4" id="8Jv-2N-g4i"/>
+                            <constraint firstAttribute="trailing" secondItem="ZcT-Ro-dUI" secondAttribute="trailing" constant="20" symbolic="YES" id="8xc-OK-bQx"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="faE-rP-ifz" secondAttribute="bottom" constant="20" id="CvP-ob-Upr"/>
                             <constraint firstItem="7u3-KI-aKi" firstAttribute="width" secondItem="kh9-bI-dsS" secondAttribute="width" id="IW4-KM-RaE"/>
+                            <constraint firstItem="SUF-BQ-GYg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="ItM-UU-Lq7"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="1sN-BA-m4t" secondAttribute="bottom" constant="20" id="PMw-DX-WAk"/>
+                            <constraint firstItem="ZcT-Ro-dUI" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="T16-db-o9q"/>
+                            <constraint firstItem="7u3-KI-aKi" firstAttribute="top" relation="greaterThanOrEqual" secondItem="SUF-BQ-GYg" secondAttribute="bottom" constant="20" id="TaC-MN-PQX"/>
+                            <constraint firstAttribute="trailing" secondItem="SUF-BQ-GYg" secondAttribute="trailing" constant="4" id="WS7-SA-Qub"/>
+                            <constraint firstAttribute="centerY" secondItem="7u3-KI-aKi" secondAttribute="centerY" priority="750" id="Wyd-Ql-AK1"/>
                             <constraint firstAttribute="trailing" secondItem="hea-hO-cP1" secondAttribute="trailing" constant="20" symbolic="YES" id="bMH-hc-abp"/>
                             <constraint firstItem="7u3-KI-aKi" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="hhX-zq-nLr">
                                 <variation key="heightClass=compact" constant="0.0"/>
                             </constraint>
-                            <constraint firstItem="ZcT-Ro-dUI" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="jnE-Uy-KiK"/>
-                            <constraint firstAttribute="centerY" secondItem="7u3-KI-aKi" secondAttribute="centerY" id="kan-l0-JXt">
-                                <variation key="heightClass=compact" constant="0.0"/>
-                            </constraint>
-                            <constraint firstItem="ZcT-Ro-dUI" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="kiH-9P-rGM"/>
                             <constraint firstItem="1sN-BA-m4t" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="peF-K2-nEC"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="hea-hO-cP1" secondAttribute="bottom" constant="20" id="wEE-x2-yA2"/>
-                            <constraint firstAttribute="trailing" secondItem="ZcT-Ro-dUI" secondAttribute="trailing" id="wpx-po-DkD">
-                                <variation key="heightClass=compact" constant="20" symbolic="YES"/>
-                            </constraint>
+                            <constraint firstItem="1sN-BA-m4t" firstAttribute="top" secondItem="ZcT-Ro-dUI" secondAttribute="bottom" constant="20" id="xWt-3h-5uQ"/>
                             <constraint firstItem="hea-hO-cP1" firstAttribute="leading" secondItem="faE-rP-ifz" secondAttribute="trailing" constant="20" id="yoP-Z8-Q3I"/>
                         </constraints>
                         <variation key="heightClass=compact">
-                            <mask key="subviews">
-                                <include reference="ZcT-Ro-dUI"/>
-                                <include reference="1sN-BA-m4t"/>
-                                <include reference="hea-hO-cP1"/>
-                                <include reference="faE-rP-ifz"/>
-                                <include reference="7u3-KI-aKi"/>
-                            </mask>
                             <mask key="constraints">
-                                <include reference="jnE-Uy-KiK"/>
-                                <include reference="kiH-9P-rGM"/>
-                                <include reference="wpx-po-DkD"/>
                                 <include reference="IW4-KM-RaE"/>
                                 <include reference="hhX-zq-nLr"/>
-                                <include reference="kan-l0-JXt"/>
                                 <include reference="PMw-DX-WAk"/>
                                 <include reference="wEE-x2-yA2"/>
                             </mask>
                         </variation>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4">
-                        <size key="portraitSize" width="320" height="568"/>
-                        <size key="landscapeSize" width="568" height="320"/>
-                    </simulatedScreenMetrics>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="betLabel" destination="oKH-tb-4Cz" id="DKH-oY-y3g"/>
                         <outlet property="betMaxButton" destination="faE-rP-ifz" id="nM9-de-fdW"/>
@@ -501,12 +440,13 @@
                         <outlet property="creditsLabel" destination="AnZ-Gh-nXN" id="9dS-Al-Rn6"/>
                         <outlet property="dealDrawButton" destination="1sN-BA-m4t" id="1Lv-aL-fFc"/>
                         <outlet property="hCardCenterConstraint" destination="hhX-zq-nLr" id="cnA-IM-eOV"/>
+                        <outlet property="paytableView" destination="SUF-BQ-GYg" id="Pdt-ge-FFd"/>
                         <outlet property="winLabel" destination="8do-sn-PpI" id="erj-HU-fHS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-23" y="169.5"/>
+            <point key="canvasLocation" x="-497" y="112"/>
         </scene>
     </scenes>
     <resources>

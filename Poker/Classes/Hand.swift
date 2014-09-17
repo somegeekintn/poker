@@ -173,7 +173,7 @@ class Hand : Printable {
 						}
 						else if sortedRanks[0][0].rank >= Card.Rank.Jack {
 							sortedRanks[0].iterate { $0.pin = true }
-							category = Category.Pair
+							category = Category.JacksOrBetter
 						}
 					}
 				}
@@ -204,7 +204,7 @@ class Hand : Printable {
 
 	enum Category: Int, Printable {
 		case None = 0
-		case Pair
+		case JacksOrBetter
 		case TwoPair
 		case ThreeOfAKind
 		case Straight
@@ -213,13 +213,16 @@ class Hand : Printable {
 		case FourOfAKind
 		case StraightFlush
 		case RoyalFlush
+
+		static let WinningCategories = [RoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, JacksOrBetter]
+		
 		var description: String {
 			get {
 				switch self {
 					case .None:
 						return "None"
-					case .Pair:
-						return "Pair"
+					case .JacksOrBetter:
+						return "Jacks or Better"
 					case .TwoPair:
 						return "Two Pair"
 					case .ThreeOfAKind:
@@ -246,7 +249,7 @@ class Hand : Printable {
 			switch self {
 				case .None:
 					payout = 0
-				case .Pair:
+				case .JacksOrBetter:
 					payout = 1
 				case .TwoPair:
 					payout = 2

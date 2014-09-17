@@ -52,6 +52,7 @@ class Game : Printable {
 	var state : State = State.Ready {
 		willSet(newValue) {
 			if newValue == State.Ready {
+				self.actualBet = 0
 				self.lastWin = 0
 			}
 			if var stateHandler = self.stateHandler {
@@ -117,6 +118,10 @@ class Game : Printable {
 	// MARK: - Betting
 	
 	func incrementBet(amount: Int = Game.maxBet()) {
+		if self.state == State.Complete {
+			self.state = State.Ready
+		}
+		
 		self.bet += amount
 	}
 	
@@ -157,7 +162,6 @@ class Game : Printable {
 				self.gameData?.winCredits(self.lastWin)
 			}
 			self.state = State.Complete
-			self.actualBet = 0
 			drew = true
 		}
 		

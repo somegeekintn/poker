@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  GameController.swift
 //  Poker
 //
 //  Created by Casey Fleser on 7/2/14.
@@ -26,9 +26,10 @@ extension UIView {
 // HUH? WHY IS THIS NECESSARY!?
 func == (lhs: UIRectEdge, rhs: UIRectEdge) -> Bool     { return lhs.toRaw() == rhs.toRaw() }
 
-class ViewController: UIViewController {
+class GameController: UIViewController {
 	// MARK: - Variables
 
+	@IBOutlet var paytableView			: PayTableView!
 	@IBOutlet var betLabel				: UILabel!
 	@IBOutlet var creditsLabel			: UILabel!
 	@IBOutlet var winLabel				: UILabel!
@@ -47,6 +48,7 @@ class ViewController: UIViewController {
 		
 		Game.sharedGame().betHandler = { (newBet: Int) -> () in
 			self.updateElements(Game.sharedGame().state)
+			self.paytableView.bet = newBet
 		}
 		
 		Game.sharedGame().stateHandler = { (newState: Game.State) -> () in
@@ -54,6 +56,7 @@ class ViewController: UIViewController {
 			if var cardViews = self.cardViews {
 				switch newState {
 					case .Ready:
+						self.paytableView.category = Hand.Category.None;
 						for cardView in cardViews {
 							cardView.card = nil
 							cardView.revealed = false
@@ -94,6 +97,7 @@ class ViewController: UIViewController {
 							dispatchTime = Int64((0.25 + CardView.RevealTime()) * Double(NSEC_PER_SEC))
 						}
 						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, dispatchTime), dispatch_get_main_queue(), {
+							self.paytableView.category = result;
 							for cardView in cardViews {
 								cardView.animatePinned()
 							}
