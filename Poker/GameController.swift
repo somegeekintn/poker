@@ -8,24 +8,6 @@
 
 import UIKit
 
-extension UIView {
-	func dumpViews(depth: Int = 0) {
-		var tabs = String()
-		
-		for idx in 0..<depth {
-			tabs += "\t"
-		}
-		println("\(tabs)-\(self)")
-		
-		for view in self.subviews {
-			view.dumpViews(depth: depth + 1)
-		}
-	}
-}
-
-// HUH? WHY IS THIS NECESSARY!?
-func == (lhs: UIRectEdge, rhs: UIRectEdge) -> Bool     { return lhs.toRaw() == rhs.toRaw() }
-
 class GameController: UIViewController {
 	// MARK: - Variables
 

@@ -8,14 +8,7 @@
 
 import UIKit
 
-protocol PayTableDataSource : class {
-//    func payTableView(payTableView: PayTableView, numberOfPayableHands: Int) -> Int
-//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
-//    optional func numberOfSectionsInTableView(tableView: UITableView) -> Int // Default is 1 if not implemented
-}
-
 class PayTableView : UIView {
-	weak var dataSource	: PayTableDataSource?
 	var borderColor		= UIColor(hue: 50.0 / 360.0, saturation: 0.85, brightness: 1.00, alpha: 1.0)
 	var textAttributes	: [NSObject : AnyObject]?
 	
