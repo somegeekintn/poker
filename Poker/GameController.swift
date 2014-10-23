@@ -19,9 +19,10 @@ class GameController: UIViewController {
 	@IBOutlet var betMaxButton			: UIButton!
 	@IBOutlet var betOneButton			: UIButton!
 	@IBOutlet var cardContainer			: UIView!
+	@IBOutlet var evContainer			: UIView!
+	@IBOutlet var evLabel				: UILabel!
 	@IBOutlet var hCardCenterConstraint	: NSLayoutConstraint!
 	var cardViews						: [CardView]?
-	let kCardViewTagStart				: Int = 1000
 	
 	// MARK: - Lifecycle
 	
@@ -33,19 +34,40 @@ class GameController: UIViewController {
 			self.paytableView.bet = newBet
 		}
 		
+		Game.sharedGame().evHandler = { (newEV: Double?) -> () in
+			var evLabel : String
+			
+			if let ev = newEV {
+				evLabel = String(format: "%0.3f", ev)
+			}
+			else {
+				evLabel = "..."
+			}
+			
+			UIView.animateWithDuration(0.2, animations: {
+				self.evLabel.alpha = 0.0
+			}, completion: { (didFinish) -> Void in
+				if didFinish {
+					self.evLabel.text = evLabel
+					UIView.animateWithDuration(0.2) { self.evLabel.alpha = 1.0 }
+				}
+			})
+		}
+		
 		Game.sharedGame().stateHandler = { (newState: Game.State) -> () in
 			// transitions here, while updateElements can be called at any point
 			if var cardViews = self.cardViews {
 				switch newState {
 					case .Ready:
-						self.paytableView.category = Hand.Category.None;
+						self.paytableView.category = Hand.Category.None
 						for cardView in cardViews {
 							cardView.card = nil
 							cardView.revealed = false
 						}
 					case .Dealt:
+						self.evLabel.text = "..."
 						for cardView in cardViews {
-							var card	= Game.sharedGame().playerCardAt(cardView.tag - self.kCardViewTagStart)
+							var card	= Game.sharedGame().playerCardAt(cardView.tag - Consts.Views.CardViewTagStart)
 							
 							cardView.card = card
 						}
@@ -63,7 +85,7 @@ class GameController: UIViewController {
 						for cardView in cardViews {
 							cardView.enabled = false
 							if !cardView.revealed {
-								var card	= Game.sharedGame().playerCardAt(cardView.tag - self.kCardViewTagStart)
+								var card	= Game.sharedGame().playerCardAt(cardView.tag - Consts.Views.CardViewTagStart)
 							
 								cardView.card = card
 								cardView.setRevealed(true, animated: true)
@@ -76,10 +98,10 @@ class GameController: UIViewController {
 						}
 						if revealCount > 0 {
 							// card flip + a slight pause to allow player a moment to recognize before we do
-							dispatchTime = Int64((0.25 + CardView.RevealTime()) * Double(NSEC_PER_SEC))
+							dispatchTime = Int64((0.25 + Consts.Views.RevealAnimationTime) * Double(NSEC_PER_SEC))
 						}
 						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, dispatchTime), dispatch_get_main_queue(), {
-							self.paytableView.category = result;
+							self.paytableView.category = result
 							for cardView in cardViews {
 								cardView.animatePinned()
 							}
@@ -105,8 +127,10 @@ class GameController: UIViewController {
 
 	func resetViews() {
 		if self.cardViews == nil {
-			var cardViews = [CardView]()
-			for cardTag in self.kCardViewTagStart..<self.kCardViewTagStart + 5 {
+			var cardViews	= [CardView]()
+			var viewTag		= Consts.Views.CardViewTagStart
+			
+			for cardTag in viewTag..<viewTag + 5 {
 				if var cardView = self.view.viewWithTag(cardTag) as? CardView {
 					cardViews.append(cardView)
 					cardView.update()
@@ -120,6 +144,7 @@ class GameController: UIViewController {
 		self.betLabel.text = String(Game.sharedGame().bet)
 		self.creditsLabel.text = String(Game.sharedGame().credits)
 		self.winLabel.text = String(Game.sharedGame().lastWin)
+		self.evContainer.hidden = true
 	}
 	
 	func positionCards(position: UIRectEdge, animated: Bool = false, completion: (() -> ())?) {
@@ -127,7 +152,7 @@ class GameController: UIViewController {
 		var animationDelay	: NSTimeInterval = 0.0
 		
 		if position != UIRectEdge.None {
-			animationDelay = CardView.RevealTime()
+			animationDelay = Consts.Views.RevealAnimationTime
 			offset = CGRectGetWidth(self.cardContainer.frame)
 			
 			if position == UIRectEdge.Left {
@@ -171,10 +196,12 @@ class GameController: UIViewController {
 				self.betMaxButton.enabled = true
 				self.betOneButton.enabled = true
 				self.dealDrawButton.enabled = Game.sharedGame().bet > 0
+				self.evContainer.hidden = true
 			case .Dealt:
 				self.betMaxButton.enabled = false
 				self.betOneButton.enabled = false
 				self.dealDrawButton.enabled = true
+				self.evContainer.hidden = false
 			case .Complete:
 				self.betMaxButton.enabled = true
 				self.betOneButton.enabled = true
@@ -234,7 +261,7 @@ class GameController: UIViewController {
 				}
 				
 				if hideCount > 0 {
-					dispatchTime = Int64((0.15 + CardView.RevealTime()) * Double(NSEC_PER_SEC))	// card flip + a little extra time to "think"
+					dispatchTime = Int64((0.15 + Consts.Views.RevealAnimationTime) * Double(NSEC_PER_SEC))	// card flip + a little extra time to "think"
 				}
 				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, dispatchTime), dispatch_get_main_queue(), { Game.sharedGame().draw(); return })
 

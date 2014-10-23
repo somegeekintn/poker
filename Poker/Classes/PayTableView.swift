@@ -28,15 +28,18 @@ class PayTableView : UIView {
 		if (self.textAttributes == nil) {
 			var maxHeight	= height - 2.0
 			var font		= UIFont(name: "Futura", size: maxHeight)
-			var textShadow	= NSShadow()
 			
-			while (font.lineHeight > maxHeight) {
-				font = font.fontWithSize(font.pointSize - 1.0)
+			while (font != nil && font!.lineHeight > maxHeight) {
+				font = font!.fontWithSize(font!.pointSize - 1.0)
 			}
 			
-			textShadow.shadowOffset = CGSize(width: 1.0, height: 1.0)
-			textShadow.shadowColor = UIColor.blackColor()
-			self.textAttributes = [ NSFontAttributeName : font, NSForegroundColorAttributeName : self.borderColor, NSShadowAttributeName : textShadow ]
+			if let font = font {
+				var textShadow	= NSShadow()
+				
+				textShadow.shadowOffset = CGSize(width: 1.0, height: 1.0)
+				textShadow.shadowColor = UIColor.blackColor()
+				self.textAttributes = [ NSFontAttributeName : font, NSForegroundColorAttributeName : self.borderColor, NSShadowAttributeName : textShadow ]
+			}
 		}
 		
 		return self.textAttributes!

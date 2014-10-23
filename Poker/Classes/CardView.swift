@@ -15,12 +15,6 @@ class CardView: UIView {
 	var enabled					: Bool = false
 	var card					: Card?
 	var revealed				: Bool = false
-	let kPinTime				: NSTimeInterval = 0.50
-	let kUnpinOffset			: CGFloat = 16.0
-	
-	class func RevealTime() -> NSTimeInterval {
-		return 0.30
-	}
 	
 	required init(coder aDecoder: NSCoder) {
 		var tapRecognizer	: UITapGestureRecognizer
@@ -66,7 +60,7 @@ class CardView: UIView {
 	func animatePinned() {
 		if let card = self.card {
 			if !card.pin {
-				UIView.animateWithDuration(self.kPinTime, animations: {
+				UIView.animateWithDuration(Consts.Views.PinAnimationTime, animations: {
 					self.alpha = 0.40
 				})
 			}
@@ -82,6 +76,8 @@ class CardView: UIView {
 			if let card = self.card {
 				card.hold = !card.hold
 				self.update()
+				
+				NSNotificationCenter.defaultCenter().postNotificationName(Consts.Notifications.RefreshEV, object: card)
 			}
 		}
 	}
@@ -95,7 +91,7 @@ class CardView: UIView {
 		endTransform = CATransform3DRotate(endTransform, endAngle, 0, 1, 0)
 		flipAnimation.fromValue = NSValue(CATransform3D: CATransform3DIdentity)
 		flipAnimation.toValue = NSValue(CATransform3D: endTransform)
-		flipAnimation.duration = CardView.RevealTime() / 2.0
+		flipAnimation.duration = Consts.Views.RevealAnimationTime / 2.0
 		flipAnimation.setValue(NSNumber(bool: clockwise), forKey: "clockwise")
 		flipAnimation.delegate = self
 		self.cardImage.layer.transform = endTransform
@@ -113,7 +109,7 @@ class CardView: UIView {
 		startTransform = CATransform3DRotate(startTransform, startAngle, 0, 1, 0)
 		flipAnimation.fromValue = NSValue(CATransform3D: startTransform)
 		flipAnimation.toValue = NSValue(CATransform3D: endTransform)
-		flipAnimation.duration = CardView.RevealTime() / 2.0
+		flipAnimation.duration = Consts.Views.RevealAnimationTime / 2.0
 		self.cardImage.layer.transform = endTransform
 		self.cardImage.layer.addAnimation(flipAnimation, forKey: "end_reveal")
 	}

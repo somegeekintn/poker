@@ -17,7 +17,7 @@ func <(lhs: Card, rhs: Card) -> Bool {
 }
 
 func <(lhs: Card.Rank, rhs: Card.Rank) -> Bool {
-	return lhs.toRaw() < rhs.toRaw()
+	return lhs.rawValue < rhs.rawValue
 }
 
 // MARK: - Card
@@ -25,12 +25,14 @@ func <(lhs: Card.Rank, rhs: Card.Rank) -> Bool {
 class Card : Comparable, Printable {
 	let rank		: Rank
 	let suit		: Suit
+	let bitFlag		: UInt64
 	var pin			: Bool = false		// indicates a card that is part of the current hand's category
 	var hold		: Bool = false
 
 	init(rank: Card.Rank, suit: Card.Suit) {
 		self.rank = rank
 		self.suit = suit
+		self.bitFlag = UInt64(self.rank.rankBit) << self.suit.shiftVal
 	}
 
 	func reset() {
@@ -58,7 +60,7 @@ class Card : Comparable, Printable {
 
 		static let MinRank = Two
 		static let MaxRank = Ace
-		static let RankCount = MaxRank.toRaw() + 1
+		static let NumRanks = MaxRank.rawValue + 1
 		
 		var identifier: String {
 			get {
@@ -79,8 +81,8 @@ class Card : Comparable, Printable {
 						return "J"
 					case .Ten:
 						return "T"
-					case let someRank where someRank.toRaw() >= Two.toRaw() && someRank.toRaw() <= Nine.toRaw():
-						return String(someRank.toRaw() + 2)
+					case let someRank where someRank.rawValue >= Two.rawValue && someRank.rawValue <= Nine.rawValue:
+						return String(someRank.rawValue + 2)
 					default:
 						return "?"
 				}
@@ -98,11 +100,17 @@ class Card : Comparable, Printable {
 						return "Queen"
 					case .Jack:
 						return "Jack"
-					case let someRank where someRank.toRaw() >= Two.toRaw() && someRank.toRaw() <= Ten.toRaw():
-						return String(someRank.toRaw() + 2)
+					case let someRank where someRank.rawValue >= Two.rawValue && someRank.rawValue <= Ten.rawValue:
+						return String(someRank.rawValue + 2)
 					default:
 						return "?"
 				}
+			}
+		}
+		
+		var rankBit: UInt {
+			get {
+				return UInt(1 << self.rawValue)
 			}
 		}
 		
@@ -110,7 +118,7 @@ class Card : Comparable, Printable {
 			var next	: Rank? = nil
 			
 			if (self != Ace) {
-				next = Rank.fromRaw(self.toRaw() + 1)
+				next = Rank(rawValue: self.rawValue + 1)
 			}
 			
 			return next
@@ -120,7 +128,7 @@ class Card : Comparable, Printable {
 			var prev	: Rank? = nil
 			
 			if (self != Two) {
-				prev = Rank.fromRaw(self.toRaw() - 1)
+				prev = Rank(rawValue: self.rawValue - 1)
 			}
 			
 			return prev
@@ -134,7 +142,7 @@ class Card : Comparable, Printable {
 		
 		static let MinSuit		= Club
 		static let MaxSuit		= Spade
-		static let SuitCount	= MaxSuit.toRaw() + 1
+		static let NumSuits		= MaxSuit.rawValue + 1
 
 		var identifier: String {
 			get {
@@ -178,6 +186,12 @@ class Card : Comparable, Printable {
 					case .Spade:
 						return "Spade"
 				}
+			}
+		}
+
+		var shiftVal: UInt64 {
+			get {
+				return UInt64(self.rawValue * Card.Rank.NumRanks)
 			}
 		}
 	}

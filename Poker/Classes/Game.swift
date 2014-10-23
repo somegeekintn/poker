@@ -10,14 +10,17 @@ import Foundation
 
 class Game : Printable {
 	typealias betCallback = (newBet: Int) -> ()
+	typealias evCallback = (newEv: Double?) -> ()
 	typealias stateCallback = (newState: State) -> ()
 
-	var deck			= Deck()
-	var hand			= Hand()
-	var gameData		: GameData?
-	var betHandler		: betCallback? = nil
-	var stateHandler	: stateCallback? = nil
-	var lastWin			: Int = 0
+	var deck					= Deck()
+	var hand					= Hand()
+	var evCalcState				= EvCalcState.Stopped
+	var gameData				: GameData?
+	var betHandler				: betCallback? = nil
+	var evHandler				: evCallback? = nil
+	var stateHandler			: stateCallback? = nil
+	var lastWin					: Int = 0
 	
 	class func sharedGame() -> Game! {
 		struct Static {
@@ -36,6 +39,8 @@ class Game : Printable {
 		return 5
 	}
 	
+	// MARK: - Var
+
 	var description: String {
 		get {
 			var desc = String()
@@ -47,28 +52,6 @@ class Game : Printable {
 
 			return desc
 		}
-	}
-	
-	var state : State = State.Ready {
-		willSet(newValue) {
-			if newValue == State.Ready {
-				self.actualBet = 0
-				self.lastWin = 0
-			}
-			if var stateHandler = self.stateHandler {
-				stateHandler(newState: newValue)
-			}
-		}
-	}
-	
-	var credits : Int {
-		var credits = 0
-		
-		if let gameData = self.gameData {
-			credits = gameData.credits.integerValue
-		}
-		
-		return credits
 	}
 	
 	var actualBet : Int = 0 {
@@ -111,8 +94,53 @@ class Game : Printable {
 		}
 	}
 	
+	var credits : Int {
+		var credits = 0
+		
+		if let gameData = self.gameData {
+			credits = gameData.credits.integerValue
+		}
+		
+		return credits
+	}
+	
+	var ev : Double? = nil {
+		willSet(newValue) {
+			if var evHandler = self.evHandler {
+				dispatch_async(dispatch_get_main_queue()) { evHandler(newEv: newValue) }
+			}
+		}
+	}
+	
+	var state : State = State.Ready {
+		willSet(newValue) {
+			if newValue == State.Ready {
+				self.actualBet = 0
+				self.lastWin = 0
+				self.ev = nil
+			}
+			else if (newValue == State.Dealt) {
+				self.calculateEV()
+			}
+			
+			if var stateHandler = self.stateHandler {
+				stateHandler(newState: newValue)
+			}
+		}
+	}
+	
+	// MARK: - Lifecycle
+	
 	required init() {
 		self.gameData = GameData.gameData()
+		
+		NSNotificationCenter.defaultCenter().addObserverForName(Consts.Notifications.RefreshEV, object: nil, queue: nil) { (notification : NSNotification!) in
+			self.calculateEV()
+		}
+	}
+	
+	deinit {
+		NSNotificationCenter.defaultCenter().removeObserver(self)
 	}
 	
 	// MARK: - Betting
@@ -132,7 +160,7 @@ class Game : Printable {
 	// MARK: - Cards
 	
 	func playerCardAt(cardIndex: Int) -> Card? {
-		return self.hand.cardAt(cardIndex)
+		return self.hand[cardIndex]
 	}
 	
 	func deal() -> Bool {
@@ -168,6 +196,49 @@ class Game : Printable {
 		return drew
 	}
 
+	func calculateEV() {
+		if self.evCalcState != EvCalcState.Stopped {
+			self.evCalcState = EvCalcState.Canceled
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.01 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { self.calculateEV() }
+		}
+		else {
+			self.ev = nil
+			self.evCalcState = EvCalcState.Running
+			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+				var heldCards	= self.hand.heldCards()
+				
+				if heldCards.count < Consts.Game.MaxHandCards {
+					var iterator	: DeckIterator
+					var evHand		= Hand()
+					var evCategory	: Hand.Category
+					var ev			: Double = 0
+					var count		= 0
+					
+					for (index, card) in enumerate(heldCards) {
+						evHand[index] = card
+					}
+
+					iterator = DeckIterator(hand: evHand, deck: self.deck, drawCount: Consts.Game.MaxHandCards - heldCards.count)
+					while iterator.advanceWithHand(evHand, deck: self.deck) && self.evCalcState != EvCalcState.Canceled {
+						evCategory = evHand.fastEval()
+
+						ev += Double(evCategory.payoutForBet(self.actualBet))
+						count++
+					}
+					
+					if self.evCalcState != EvCalcState.Canceled {
+						self.ev = ev / Double(count)
+					}
+				}
+				else {
+					self.ev = Double(self.hand.evaluate().payoutForBet(self.actualBet))
+				}
+				
+				self.evCalcState = EvCalcState.Stopped
+			}
+		}
+	}
+
 	// MARK: - Debugging
 	
 	func stress() {
@@ -199,5 +270,11 @@ class Game : Printable {
 				}
 			}
 		}
+	}
+	
+	enum EvCalcState: Int {
+		case Stopped
+		case Running
+		case Canceled
 	}
 }

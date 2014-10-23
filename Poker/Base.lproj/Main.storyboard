@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--Game Controller-->
@@ -374,15 +374,49 @@
                                         <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <size key="shadowOffset" width="1" height="1"/>
                                     </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6AW-Eh-i97" userLabel="EV Container">
+                                        <rect key="frame" x="0.0" y="0.0" width="88" height="20"/>
+                                        <subviews>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="EV" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="02z-kt-KF0">
+                                                <rect key="frame" x="0.0" y="0.0" width="19" height="20"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                                <color key="textColor" red="0.99489688873291016" green="0.75157052278518677" blue="0.12740039825439453" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
+                                            </label>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="1000.000" lineBreakMode="tailTruncation" minimumFontSize="12" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hr5-eq-81T">
+                                                <rect key="frame" x="23" y="0.0" width="65" height="20"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                                <color key="textColor" red="0.99489688873291016" green="0.75157052278518677" blue="0.12740039825439453" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <size key="shadowOffset" width="1" height="1"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="02z-kt-KF0" firstAttribute="leading" secondItem="6AW-Eh-i97" secondAttribute="leading" id="00E-0z-ZQ6"/>
+                                            <constraint firstAttribute="trailing" secondItem="hr5-eq-81T" secondAttribute="trailing" id="2wd-KQ-hoG"/>
+                                            <constraint firstAttribute="bottom" secondItem="02z-kt-KF0" secondAttribute="bottom" id="Dzz-dc-FTY"/>
+                                            <constraint firstItem="hr5-eq-81T" firstAttribute="leading" secondItem="02z-kt-KF0" secondAttribute="trailing" constant="4" id="Iu3-xX-a6D"/>
+                                            <constraint firstItem="02z-kt-KF0" firstAttribute="top" secondItem="6AW-Eh-i97" secondAttribute="top" id="cP3-Go-o8w"/>
+                                            <constraint firstItem="hr5-eq-81T" firstAttribute="top" secondItem="6AW-Eh-i97" secondAttribute="top" id="dbc-Yc-ifb"/>
+                                            <constraint firstAttribute="bottom" secondItem="hr5-eq-81T" secondAttribute="bottom" id="eTe-8A-VFc"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="OGS-2P-nCR" firstAttribute="leading" secondItem="AnZ-Gh-nXN" secondAttribute="trailing" constant="4" id="4DZ-ox-v9P"/>
                                     <constraint firstAttribute="trailing" secondItem="OGS-2P-nCR" secondAttribute="trailing" id="EKb-XB-Xll"/>
                                     <constraint firstAttribute="bottom" secondItem="AnZ-Gh-nXN" secondAttribute="bottom" id="Gg9-qX-dI8"/>
+                                    <constraint firstItem="6AW-Eh-i97" firstAttribute="leading" secondItem="ZcT-Ro-dUI" secondAttribute="leading" id="IWR-bX-oi6"/>
                                     <constraint firstItem="8do-sn-PpI" firstAttribute="leading" secondItem="SKO-jq-7I7" secondAttribute="trailing" constant="4" id="O9U-7d-HhP"/>
                                     <constraint firstItem="k1T-zY-1ck" firstAttribute="top" secondItem="ZcT-Ro-dUI" secondAttribute="top" id="TID-Ft-YQH"/>
                                     <constraint firstAttribute="bottom" secondItem="SKO-jq-7I7" secondAttribute="bottom" id="WtG-lq-W3E"/>
                                     <constraint firstItem="SKO-jq-7I7" firstAttribute="top" secondItem="k1T-zY-1ck" secondAttribute="bottom" id="Zyu-wA-U6o"/>
+                                    <constraint firstItem="6AW-Eh-i97" firstAttribute="top" secondItem="ZcT-Ro-dUI" secondAttribute="top" id="aTM-Ak-ZlU"/>
                                     <constraint firstItem="SKO-jq-7I7" firstAttribute="leading" secondItem="ZcT-Ro-dUI" secondAttribute="leading" id="g1Z-sz-Oay"/>
                                     <constraint firstAttribute="centerX" secondItem="k1T-zY-1ck" secondAttribute="centerX" id="oOg-Ac-6Rf"/>
                                     <constraint firstAttribute="bottom" secondItem="8do-sn-PpI" secondAttribute="bottom" id="q6Y-QJ-B1h"/>
@@ -456,6 +490,8 @@
                         <outlet property="cardContainer" destination="7u3-KI-aKi" id="O2X-hW-4nU"/>
                         <outlet property="creditsLabel" destination="AnZ-Gh-nXN" id="9dS-Al-Rn6"/>
                         <outlet property="dealDrawButton" destination="1sN-BA-m4t" id="1Lv-aL-fFc"/>
+                        <outlet property="evContainer" destination="6AW-Eh-i97" id="XOy-EH-eKW"/>
+                        <outlet property="evLabel" destination="hr5-eq-81T" id="9nC-pc-m50"/>
                         <outlet property="hCardCenterConstraint" destination="hhX-zq-nLr" id="cnA-IM-eOV"/>
                         <outlet property="paytableView" destination="SUF-BQ-GYg" id="Pdt-ge-FFd"/>
                         <outlet property="winLabel" destination="8do-sn-PpI" id="erj-HU-fHS"/>

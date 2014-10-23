@@ -28,8 +28,8 @@ class GameData: NSManagedObject {
 				}
 
 				if gameData == nil {
-					gameData = NSEntityDescription.insertNewObjectForEntityForName("GameData", inManagedObjectContext: context) as GameData?
-					gameData?.credits = 1000;
+					gameData = NSEntityDescription.insertNewObjectForEntityForName("GameData", inManagedObjectContext: context) as? GameData
+					gameData?.credits = 1000
 					appDelegate.saveContext()
 				}
 			}

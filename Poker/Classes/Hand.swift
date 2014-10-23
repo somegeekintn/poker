@@ -8,56 +8,27 @@
 
 import Swift
 
-extension Array {
-	func iterate(apply: (T) -> ()) {
-		for item in self { apply(item) }
-	}
-	
-	func filteredCount(apply: (T) -> Bool) -> Int {
-		var count = 0
-		for item in self {
-			if apply(item) {
-				count++
-			}
-		}
-		return count
-	}
-
-	func indexOf(test: (T) -> Bool) -> Int? {
-		var itemIndex: Int? = nil
-		
-		for (index, value) in enumerate(self) {
-			if (test(value)) {
-				itemIndex = index
-				break
-			}
-		}
-		
-		return itemIndex
-	}
-}
-
 class Hand : Printable {
-	let capacity	= 5
-	var cardSlots	= [Card?](count: 5, repeatedValue: nil)
+	private var cardSlots	: [Card?]
+	private var rankBits	: [UInt]
 	
     var description: String {
 		get {
 			var desc = String()
-			var cards = self.cards
 			
-			if (cards.count == 0) {
-				desc = "no cards"
-			}
-			else {
-				for card in cards {
+			for cardSlot in self.cardSlots {
+				if let card = cardSlot {
 					if !desc.isEmpty {
 						desc += ","
 					}
 					desc += card.description
 				}
-				
-				desc += " - \(self.evaluate())"
+			}
+			
+			desc += " - \(self.evaluate())"
+			
+			if desc.isEmpty {
+				desc = "no cards"
 			}
 			
 			return desc
@@ -77,43 +48,74 @@ class Hand : Printable {
 			return cards
 		}
 	}
+
+	init() {
+		self.cardSlots = [Card?](count: Consts.Game.MaxHandCards, repeatedValue: nil)
+		self.rankBits = [ 0x00, 0x00, 0x00, 0x00 ]
+	}
 	
+    subscript (position: Int) -> Card? {
+		get {
+			return self.cardSlots[position]
+		}
+		set (newValue) {
+			self.cardSlots[position] = newValue
+		}
+	}
+
+	func initialDrawFromDeck(deck: Deck) {
+		self.cardSlots = [Card?](count: Consts.Game.MaxHandCards, repeatedValue: nil)
+		self.drawFromDeck(deck)
+	}
+	
+	func drawFromDeck(deck: Deck) {
+		for (index, value) in enumerate(self.cardSlots) {
+			if (value == nil || !value!.hold) {
+				self.cardSlots[index] = deck.drawCard()
+			}
+		}
+	}
+	
+	func heldCards() -> [Card] {
+		var heldCards	= [Card]()
+		
+		for cardSlot in self.cardSlots {
+			if let card = cardSlot {
+				if card.hold {
+					heldCards.append(card)
+				}
+			}
+		}
+
+		return heldCards
+	}
+
 	func evaluate() -> Category {
 		var	category		= Category.None
 		var	sortedCards		= self.cards
 
 		if sortedCards.count > 1 {	// at least 2 cards required to make a hand
-			var	sortedRanks		= [[Card]]()
-			var	sortedSuits		= [[Card]]()
 			var isStraight		: Bool = true
 			var isFlush			: Bool
 			var lastCard		: Card? = nil
+			var sortedRanks		= [[Card]](count: Card.Rank.NumRanks, repeatedValue: [Card]())
+			var sortedSuits		= [[Card]](count: Card.Suit.NumSuits, repeatedValue: [Card]())
 			
 			sortedCards.sort{ $0 > $1 }
 			for card in sortedCards {
 				// --->>> count ranks
-				if var itemIdx = (sortedRanks.indexOf { rankList in return rankList[0].rank == card.rank }) {
-					sortedRanks[itemIdx].append(card)
-				}
-				else {
-					sortedRanks.append([card])
-				}
+				sortedRanks[card.rank.rawValue].append(card)
 
 				// --->>> count suits
-				if var itemIdx = (sortedSuits.indexOf { suitList in return suitList[0].suit == card.suit }) {
-					sortedSuits[itemIdx].append(card)
-				}
-				else {
-					sortedSuits.append([card])
-				}
+				sortedSuits[card.suit.rawValue].append(card)
 
 				// --->>> straight test
 				if (isStraight) {
 					if let lastCard = lastCard {
 						if let nextExpected = lastCard.rank.nextLower() {
 							if card.rank != nextExpected {
-								// test special case for the ace. if last was an
-								if lastCard.rank != Card.Rank.Ace || lastCard.rank != Card.Rank.Five {
+								// test special case for the ace. if last was an ace, this card should be a five
+								if lastCard.rank != Card.Rank.Ace || card.rank != Card.Rank.Five {
 									isStraight = false
 								}
 							}
@@ -127,13 +129,13 @@ class Hand : Printable {
 			}
 
 			// --->>> Sort ranks and suits
-			sortedRanks.sort { (p1, p2) in p1.count > p2.count || (p1.count == p2.count && p1[0].rank > p2[0].rank) }
+			sortedRanks.sort { (p1, p2) in p1.count > p2.count || (p1.count > 0 && p1.count == p2.count && p1[0].rank > p2[0].rank) }
 			sortedSuits.sort { (p1, p2) in p1.count > p2.count }
 
-//			println("rankCounts: \(sortedRanks)\nsuitCounts: \(sortedSuits)")
+	//			println("rankCounts: \(sortedRanks)\nsuitCounts: \(sortedSuits)")
 
 			// --->>> Flush?
-			isFlush = sortedSuits[0].count == self.capacity
+			isFlush = sortedSuits[0].count == Consts.Game.MaxHandCards
 			
 			// --->>> Straight Flush?
 			if isFlush && isStraight {
@@ -145,10 +147,12 @@ class Hand : Printable {
 				
 				if highestRankCount == 4 {
 					sortedRanks[0].iterate { $0.pin = true }
+					for card in sortedRanks[0] { card.pin = true }
+					
 					category = Category.FourOfAKind
 				}
 				else {
-					if sortedRanks.count > 1 && highestRankCount == 3 && sortedRanks[1].count == 2 {
+					if highestRankCount == 3 && sortedRanks[1].count == 2 {
 						sortedRanks[0].iterate { $0.pin = true }
 						sortedRanks[1].iterate { $0.pin = true }
 						category = Category.FullHouse
@@ -183,23 +187,103 @@ class Hand : Printable {
 		return category
 	}
 
-	func initialDrawFromDeck(deck: Deck) {
-		self.cardSlots = [Card?](count: 5, repeatedValue: nil)
-		self.drawFromDeck(deck)
-	}
-	
-	func drawFromDeck(deck: Deck) {
-		for (index, value) in enumerate(self.cardSlots) {
-			if (value == nil || !value!.hold) {
-				self.cardSlots[index] = deck.drawCard()
+	func fastEval() -> Category {
+		// normall I don't return in the middle of functions, but this just doesn't
+		// look nice sprinkled with all the breaks and ifs we'd need otherwise
+		var	rankBits		= UInt64(0)
+		var	workBits		= UInt64(0)
+		var	allSuits		= UInt(0)
+		var	allRanks		= UInt(Consts.Hands.SuitMask)
+		
+		for cardSlot in self.cardSlots {
+			if let card = cardSlot {
+				rankBits |= card.bitFlag
 			}
 		}
+		
+		workBits = rankBits
+		for _ in 0..<4 {
+			var suitRankBits	= UInt(workBits & Consts.Hands.SuitMask64)
+			
+			if suitRankBits != 0 {
+				var straightMask	= Consts.Hands.RoyalStraightMask		// 0x1f00
+				
+				while straightMask >= Consts.Hands.To6StraightMask {		// >= 0x001f
+					if suitRankBits == straightMask {
+						return suitRankBits == Consts.Hands.RoyalStraightMask ? Category.RoyalFlush : Category.StraightFlush
+					}
+					straightMask >>= 1
+				}
+				
+				if suitRankBits == Consts.Hands.A5StraightMask {		// 0x100f
+					return Category.StraightFlush
+				}
+				
+				if suitRankBits.bitCount() == Consts.Game.MaxHandCards {
+					// if we have a flush that isn't a straight, the only higher hand is 4 of a kind or a full house which we can't have if we have a flush
+					return Category.Flush
+				}
+			
+				allSuits |= suitRankBits
+			}
+			allRanks &= suitRankBits
+			workBits >>= UInt64(Card.Rank.NumRanks)
+		}
+		
+		if allRanks != 0 {
+			return Category.FourOfAKind
+		}
+		else {
+			let cBits		= UInt((rankBits >> Card.Suit.Club.shiftVal) & Consts.Hands.SuitMask64)
+			let dBits		= UInt((rankBits >> Card.Suit.Diamond.shiftVal) & Consts.Hands.SuitMask64)
+			let hBits		= UInt((rankBits >> Card.Suit.Heart.shiftVal) & Consts.Hands.SuitMask64)
+			let sBits		= UInt((rankBits >> Card.Suit.Spade.shiftVal) & Consts.Hands.SuitMask64)
+			let match3		= (cBits & dBits & hBits) | (cBits & dBits & sBits)	| (cBits & hBits & sBits) | (dBits & hBits & sBits)
+			var match2		= (cBits & dBits) | (cBits & hBits) | (cBits & sBits)
+			
+			match2 |= (dBits & hBits) | (dBits & sBits) | (hBits & sBits)	// have to break this up otherwise the compiler complains
+			match2 &= ~match3
+
+			if match3 != 0 && match2 != 0 {
+				return Category.FullHouse
+			}
+			else {
+				var straightMask	= Consts.Hands.RoyalStraightMask		// 0x1f00
+				
+				while straightMask >= Consts.Hands.To6StraightMask {		// >= 0x001f
+					if allSuits == straightMask {
+						return Category.Straight
+					}
+					straightMask >>= 1
+				}
+				
+				if allSuits == Consts.Hands.A5StraightMask {				// 0x100f
+					return Category.Straight
+				}
+				
+				if match3 != 0 {
+					return Category.ThreeOfAKind
+				}
+				else {
+					var pairCount = match2.bitCount()
+					
+					if pairCount != 0 {
+						if pairCount > 1 {
+							return Category.TwoPair
+						}
+						else {
+							if match2 >= Card.Rank.Jack.rankBit {
+								return Category.JacksOrBetter
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return Category.None
 	}
 	
-	func cardAt(position: Int) -> Card? {
-		return self.cardSlots[position]
-	}
-
 	/* --- Category --- */
 
 	enum Category: Int, Printable {
@@ -244,7 +328,7 @@ class Hand : Printable {
 		}
 		
 		func payoutForBet(bet: Int) -> Int {
-			var payout = 0;
+			var payout = 0
 			
 			switch self {
 				case .None:

@@ -14,9 +14,9 @@ class Deck : Printable {
 	var position	= 0
 	
 	init() {
-		for rawSuit in Card.Suit.MinSuit.toRaw()...Card.Suit.MaxSuit.toRaw() {
-			for rawRank in Card.Rank.MinRank.toRaw()...Card.Rank.MaxRank.toRaw() {
-				cards.append(Card(rank: Card.Rank.fromRaw(rawRank)!, suit: Card.Suit.fromRaw(rawSuit)!))
+		for rawSuit in Card.Suit.MinSuit.rawValue...Card.Suit.MaxSuit.rawValue {
+			for rawRank in Card.Rank.MinRank.rawValue...Card.Rank.MaxRank.rawValue {
+				cards.append(Card(rank: Card.Rank(rawValue: rawRank)!, suit: Card.Suit(rawValue: rawSuit)!))
 			}
 		}
 	}
@@ -33,6 +33,12 @@ class Deck : Printable {
 			}
 			
 			return desc
+		}
+	}
+	
+    subscript (position: Int) -> Card {
+		get {
+			return self.cards[position]
 		}
 	}
 	
@@ -54,7 +60,7 @@ class Deck : Printable {
 		}
 	}
 	
-	func drawCard () -> Card {
+	func drawCard() -> Card {
 		var card = self.cards[self.position++]
 
 		card.reset()
@@ -62,3 +68,4 @@ class Deck : Printable {
 		return card
 	}
 }
+
