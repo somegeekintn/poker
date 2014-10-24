@@ -23,11 +23,11 @@ func <(lhs: Card.Rank, rhs: Card.Rank) -> Bool {
 // MARK: - Card
 
 class Card : Comparable, Printable {
-	let rank		: Rank
-	let suit		: Suit
-	let bitFlag		: UInt64
-	var pin			: Bool = false		// indicates a card that is part of the current hand's category
-	var hold		: Bool = false
+	final let rank		: Rank
+	final let suit		: Suit
+	final let bitFlag	: UInt64
+	var pin				: Bool = false		// indicates a card that is part of the current hand's category
+	var hold			: Bool = false
 
 	init(rank: Card.Rank, suit: Card.Suit) {
 		self.rank = rank

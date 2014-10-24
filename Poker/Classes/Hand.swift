@@ -10,7 +10,6 @@ import Swift
 
 class Hand : Printable {
 	private var cardSlots	: [Card?]
-	private var rankBits	: [UInt]
 	
     var description: String {
 		get {
@@ -51,7 +50,6 @@ class Hand : Printable {
 
 	init() {
 		self.cardSlots = [Card?](count: Consts.Game.MaxHandCards, repeatedValue: nil)
-		self.rankBits = [ 0x00, 0x00, 0x00, 0x00 ]
 	}
 	
     subscript (position: Int) -> Card? {
@@ -188,12 +186,14 @@ class Hand : Printable {
 	}
 
 	func fastEval() -> Category {
-		// normall I don't return in the middle of functions, but this just doesn't
+		// normally I don't return in the middle of functions, but this just doesn't
 		// look nice sprinkled with all the breaks and ifs we'd need otherwise
 		var	rankBits		= UInt64(0)
-		var	workBits		= UInt64(0)
-		var	allSuits		= UInt(0)
-		var	allRanks		= UInt(Consts.Hands.SuitMask)
+		var	workBits		: UInt64
+		var cBits			= UInt(0)
+		var dBits			= UInt(0)
+		var hBits			= UInt(0)
+		var sBits			= UInt(0)
 		
 		for cardSlot in self.cardSlots {
 			if let card = cardSlot {
@@ -202,7 +202,7 @@ class Hand : Printable {
 		}
 		
 		workBits = rankBits
-		for _ in 0..<4 {
+		for rawSuit in 0..<4 {
 			var suitRankBits	= UInt(workBits & Consts.Hands.SuitMask64)
 			
 			if suitRankBits != 0 {
@@ -224,20 +224,24 @@ class Hand : Printable {
 					return Category.Flush
 				}
 			
-				allSuits |= suitRankBits
+				// Why not use an array like a sane person? Well, arrays are slow and I've been unable to find a way to make them
+				// as fast as I'd like. Also, assigning here using this switch is fractionally quicker than shifting and masking
+				// later on
+				switch rawSuit {
+					case Card.Suit.Club.rawValue:		cBits = suitRankBits
+					case Card.Suit.Diamond.rawValue:	dBits = suitRankBits
+					case Card.Suit.Heart.rawValue:		hBits = suitRankBits
+					case Card.Suit.Spade.rawValue:		sBits = suitRankBits
+					default:							break
+				}
 			}
-			allRanks &= suitRankBits
 			workBits >>= UInt64(Card.Rank.NumRanks)
 		}
 		
-		if allRanks != 0 {
+		if (cBits & dBits & hBits & sBits) != 0 {
 			return Category.FourOfAKind
 		}
 		else {
-			let cBits		= UInt((rankBits >> Card.Suit.Club.shiftVal) & Consts.Hands.SuitMask64)
-			let dBits		= UInt((rankBits >> Card.Suit.Diamond.shiftVal) & Consts.Hands.SuitMask64)
-			let hBits		= UInt((rankBits >> Card.Suit.Heart.shiftVal) & Consts.Hands.SuitMask64)
-			let sBits		= UInt((rankBits >> Card.Suit.Spade.shiftVal) & Consts.Hands.SuitMask64)
 			let match3		= (cBits & dBits & hBits) | (cBits & dBits & sBits)	| (cBits & hBits & sBits) | (dBits & hBits & sBits)
 			var match2		= (cBits & dBits) | (cBits & hBits) | (cBits & sBits)
 			
@@ -249,6 +253,7 @@ class Hand : Printable {
 			}
 			else {
 				var straightMask	= Consts.Hands.RoyalStraightMask		// 0x1f00
+				var	allSuits		= cBits | dBits | hBits | sBits
 				
 				while straightMask >= Consts.Hands.To6StraightMask {		// >= 0x001f
 					if allSuits == straightMask {

@@ -43,13 +43,11 @@ class DeckIterator : Printable {
 		}
 	}
 	
-	func advanceWithHand(hand: Hand, deck: Deck) -> Bool {
+	final func advanceWithHand(hand: Hand, deck: Deck) -> Bool {
 		var didAdvance	= true
-		var card		: Card
 		
 		if let nextSelection = self.generator.next() {
-			card = deck[nextSelection]
-			hand[self.handPosition] = card
+			hand[self.handPosition] = deck[nextSelection]
 			self.selection = nextSelection
 		}
 		else {
@@ -60,8 +58,7 @@ class DeckIterator : Printable {
 					self.range = next.selection! + 1..<self.range.endIndex
 					self.generator = self.range.generate()
 					self.selection = self.generator.next()
-					card = deck[self.selection!]
-					hand[self.handPosition] = card
+					hand[self.handPosition] = deck[self.selection!]
 				}
 			}
 			else {

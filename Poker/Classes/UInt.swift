@@ -12,10 +12,8 @@ extension UInt {
 		var count	= 0
 		
 		while workVal != 0 {
-			if (workVal & 1) != 0 {
-				count++
-			}
-			workVal >>= 1
+			workVal &= workVal - 1
+			count++
 		}
 		
 		return count

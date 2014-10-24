@@ -44,14 +44,16 @@ class GameController: UIViewController {
 				evLabel = "..."
 			}
 			
-			UIView.animateWithDuration(0.2, animations: {
-				self.evLabel.alpha = 0.0
-			}, completion: { (didFinish) -> Void in
-				if didFinish {
-					self.evLabel.text = evLabel
-					UIView.animateWithDuration(0.2) { self.evLabel.alpha = 1.0 }
-				}
-			})
+			if (self.evLabel.text != evLabel) {
+				UIView.animateWithDuration(0.2, animations: {
+					self.evLabel.alpha = 0.0
+				}, completion: { (didFinish) -> Void in
+					if didFinish {
+						self.evLabel.text = evLabel
+						UIView.animateWithDuration(0.2) { self.evLabel.alpha = 1.0 }
+					}
+				})
+			}
 		}
 		
 		Game.sharedGame().stateHandler = { (newState: Game.State) -> () in

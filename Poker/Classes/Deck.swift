@@ -16,7 +16,7 @@ class Deck : Printable {
 	init() {
 		for rawSuit in Card.Suit.MinSuit.rawValue...Card.Suit.MaxSuit.rawValue {
 			for rawRank in Card.Rank.MinRank.rawValue...Card.Rank.MaxRank.rawValue {
-				cards.append(Card(rank: Card.Rank(rawValue: rawRank)!, suit: Card.Suit(rawValue: rawSuit)!))
+				self.cards.append(Card(rank: Card.Rank(rawValue: rawRank)!, suit: Card.Suit(rawValue: rawSuit)!))
 			}
 		}
 	}
@@ -36,14 +36,14 @@ class Deck : Printable {
 		}
 	}
 	
-    subscript (position: Int) -> Card {
+    final subscript (position: Int) -> Card {
 		get {
 			return self.cards[position]
 		}
 	}
 	
 	func shuffle() {
-		let cardCount	= cards.count
+		let cardCount	= self.cards.count
 		
 		self.position = 0
 		for var cardIdx=0; cardIdx<cardCount; cardIdx++ {
@@ -54,9 +54,9 @@ class Deck : Printable {
 				targetIdx = Int(arc4random_uniform(UInt32(cardCount)))
 			} while (targetIdx == cardIdx)
 
-			savedCard = cards[cardIdx]
-			cards[cardIdx] = cards[targetIdx]
-			cards[targetIdx] = savedCard
+			savedCard = self.cards[cardIdx]
+			self.cards[cardIdx] = self.cards[targetIdx]
+			self.cards[targetIdx] = savedCard
 		}
 	}
 	

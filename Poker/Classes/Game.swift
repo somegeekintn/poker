@@ -206,6 +206,7 @@ class Game : Printable {
 			self.evCalcState = EvCalcState.Running
 			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
 				var heldCards	= self.hand.heldCards()
+				var startTime	= NSDate()
 				
 				if heldCards.count < Consts.Game.MaxHandCards {
 					var iterator	: DeckIterator
@@ -233,6 +234,9 @@ class Game : Printable {
 				else {
 					self.ev = Double(self.hand.evaluate().payoutForBet(self.actualBet))
 				}
+				
+				var dur		= NSDate().timeIntervalSinceDate(startTime)
+				println("ev dur: \(dur)")
 				
 				self.evCalcState = EvCalcState.Stopped
 			}
