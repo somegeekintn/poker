@@ -303,7 +303,8 @@ class Hand : Printable {
 		case StraightFlush
 		case RoyalFlush
 
-		static let WinningCategories = [RoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, JacksOrBetter]
+		static let WinningCategories	= [RoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, JacksOrBetter]
+		static let NumCategories		= RoyalFlush.rawValue + 1
 		
 		var description: String {
 			get {

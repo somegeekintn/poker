@@ -9,7 +9,7 @@
 import UIKit
 
 class PayTableView : UIView {
-	var borderColor		= UIColor(hue: 50.0 / 360.0, saturation: 0.85, brightness: 1.00, alpha: 1.0)
+	var borderColor		= UIColor(hue: 50.0 / 360.0, saturation: 0.85, brightness: 0.90, alpha: 1.0)
 	var textAttributes	: [NSObject : AnyObject]?
 	
 	var bet : Int = 0 {
@@ -47,7 +47,6 @@ class PayTableView : UIView {
 	
 	override func drawRect(rect: CGRect) {
 		var	categoryCount	= Hand.Category.WinningCategories.count
-		var borderColor		= UIColor(hue: 50.0 / 360.0, saturation: 0.85, brightness: 1.00, alpha: 1.0)
 		var rowFrame		= self.bounds
 		var payStyle		= NSParagraphStyle.defaultParagraphStyle().mutableCopy() as NSMutableParagraphStyle
 		var payAttrs		: [NSObject : AnyObject]
@@ -73,8 +72,14 @@ class PayTableView : UIView {
 		if self.bet > 0 {
 			var columnFrame		= payFrame.rectByOffsetting(dx: payFrame.width * CGFloat(self.bet - 1), dy: 0.0)
 			
-			UIColor(hue: 120.0 / 360.0, saturation: 1.00, brightness: 0.40, alpha: 1.0).set()
-			UIRectFill(columnFrame)
+			UIColor(hue: 120.0 / 360.0, saturation: 1.00, brightness: 0.50, alpha: 0.75).set()
+			UIRectFillUsingBlendMode(columnFrame, kCGBlendModeScreen)
+		}
+		if self.category != Hand.Category.None {
+			var catFrame		= rowFrame.rectByOffsetting(dx: 0.0, dy: rowFrame.height * CGFloat(Hand.Category.NumCategories - (self.category.rawValue + 1)))
+			
+			UIColor(hue: 120.0 / 360.0, saturation: 1.00, brightness: 0.50, alpha: 0.75).set()
+			UIRectFillUsingBlendMode(catFrame, kCGBlendModeScreen)
 		}
 		
 		textAttrs = self.textAttributesForRowHeight(rowFrame.height)
@@ -106,7 +111,7 @@ class PayTableView : UIView {
 			rowFrame.offset(dx: 0.0, dy: rowFrame.height)
 		}
 
-		borderColor.set()
+		self.borderColor.set()
 		UIRectFrame(self.bounds)
 		columnOutline.stroke()
 	}
