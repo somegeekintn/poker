@@ -17,14 +17,14 @@ class GameData: NSManagedObject {
 	
     class func gameData() -> GameData? {
 		var gameData		: GameData?
-		var appDelegate		= UIApplication.sharedApplication().delegate as AppDelegate?
+		var appDelegate		= UIApplication.sharedApplication().delegate as! AppDelegate?
 		
 		if let appDelegate = appDelegate {
 			if let context = appDelegate.managedObjectContext {
 				var request =	NSFetchRequest(entityName: "GameData")
 				
 				if let results = context.executeFetchRequest(request, error: nil) {
-					gameData = results.first as GameData?
+					gameData = results.first as? GameData
 				}
 
 				if gameData == nil {
@@ -39,7 +39,7 @@ class GameData: NSManagedObject {
 	}
 	
 	func saveData() {
-		var appDelegate		= UIApplication.sharedApplication().delegate as AppDelegate?
+		var appDelegate		= UIApplication.sharedApplication().delegate as! AppDelegate?
 		
 		if let appDelegate = appDelegate {
 			appDelegate.saveContext()

@@ -48,7 +48,7 @@ class PayTableView : UIView {
 	override func drawRect(rect: CGRect) {
 		var	categoryCount	= Hand.Category.WinningCategories.count
 		var rowFrame		= self.bounds
-		var payStyle		= NSParagraphStyle.defaultParagraphStyle().mutableCopy() as NSMutableParagraphStyle
+		var payStyle		= NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
 		var payAttrs		: [NSObject : AnyObject]
 		var textAttrs		: [NSObject : AnyObject]
 		var payColumnWidth	: CGFloat

@@ -127,7 +127,15 @@ class Hand : Printable {
 			}
 
 			// --->>> Sort ranks and suits
-			sortedRanks.sort { (p1, p2) in p1.count > p2.count || (p1.count > 0 && p1.count == p2.count && p1[0].rank > p2[0].rank) }
+			sortedRanks.sort { (p1, p2) -> Bool in
+				var orderedBefore = p1.count > p2.count
+				
+				if !orderedBefore {
+					orderedBefore = p1.count > 0 && p1.count == p2.count && p1[0].rank > p2[0].rank
+				}
+				
+				return orderedBefore
+			}
 			sortedSuits.sort { (p1, p2) in p1.count > p2.count }
 
 	//			println("rankCounts: \(sortedRanks)\nsuitCounts: \(sortedSuits)")
