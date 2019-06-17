@@ -16,6 +16,7 @@ class Deck : CustomStringConvertible {
 	init() {
 		for rawSuit in Card.Suit.MinSuit.rawValue...Card.Suit.MaxSuit.rawValue {
 			for rawRank in Card.Rank.MinRank.rawValue...Card.Rank.MaxRank.rawValue {
+#warning("force unwrap")
 				self.cards.append(Card(rank: Card.Rank(rawValue: rawRank)!, suit: Card.Suit(rawValue: rawSuit)!))
 			}
 		}

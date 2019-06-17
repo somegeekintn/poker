@@ -227,7 +227,7 @@ class Game : CustomStringConvertible {
 		self.betMax()
 		for idx in 0..<100 {
 			self.deal()
-			if self.hand.evaluate() != Hand.Category.None {
+			if self.hand.evaluate() != Hand.Category.none {
 				print("\(idx): \(self)")
 			}
 			

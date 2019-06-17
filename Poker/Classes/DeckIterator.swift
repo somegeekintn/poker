@@ -55,9 +55,11 @@ class DeckIterator : CustomStringConvertible {
 				didAdvance = next.advanceWithHand(hand: hand, deck: deck)
 				
 				if didAdvance {
+#warning("force unwrap")
 					self.range = next.selection! + 1 ... self.range.upperBound
 					self.generator = self.range.makeIterator()
 					self.selection = self.generator.next()
+#warning("force unwrap")
 					hand[self.handPosition] = deck[self.selection!]
 				}
 			}

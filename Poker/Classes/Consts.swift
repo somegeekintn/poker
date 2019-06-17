@@ -27,18 +27,18 @@ struct Consts {
 	struct Hands {
 		static let SuitMask				= UInt(0x1fff)		// 13 bits
 		static let SuitMask64			= UInt64(0x1fff)	// 13 bits
-		static let RoyalStraightMask	= UInt(Card.Rank.Ace.rankBit | Card.Rank.King.rankBit | Card.Rank.Queen.rankBit | Card.Rank.Jack.rankBit | Card.Rank.Ten.rankBit)
-		static let To6StraightMask		= UInt(Card.Rank.Six.rankBit | Card.Rank.Five.rankBit | Card.Rank.Four.rankBit | Card.Rank.Three.rankBit | Card.Rank.Two.rankBit)
-		static let A5StraightMask		= UInt(Card.Rank.Five.rankBit | Card.Rank.Four.rankBit | Card.Rank.Three.rankBit | Card.Rank.Two.rankBit | Card.Rank.Ace.rankBit)
+		static let RoyalStraightMask	= UInt(Card.Rank.ace.rankBit | Card.Rank.king.rankBit | Card.Rank.queen.rankBit | Card.Rank.jack.rankBit | Card.Rank.ten.rankBit)
+		static let To6StraightMask		= UInt(Card.Rank.six.rankBit | Card.Rank.five.rankBit | Card.Rank.four.rankBit | Card.Rank.three.rankBit | Card.Rank.two.rankBit)
+		static let A5StraightMask		= UInt(Card.Rank.five.rankBit | Card.Rank.four.rankBit | Card.Rank.three.rankBit | Card.Rank.two.rankBit | Card.Rank.ace.rankBit)
 		static let AllStraightMasks		: [UInt] = [
 			RoyalStraightMask,
-			UInt(Card.Rank.King.rankBit | Card.Rank.Queen.rankBit | Card.Rank.Jack.rankBit | Card.Rank.Ten.rankBit | Card.Rank.Nine.rankBit),
-			UInt(Card.Rank.Queen.rankBit | Card.Rank.Jack.rankBit | Card.Rank.Ten.rankBit | Card.Rank.Nine.rankBit | Card.Rank.Eight.rankBit),
-			UInt(Card.Rank.Jack.rankBit | Card.Rank.Ten.rankBit | Card.Rank.Nine.rankBit | Card.Rank.Eight.rankBit | Card.Rank.Seven.rankBit),
-			UInt(Card.Rank.Ten.rankBit | Card.Rank.Nine.rankBit | Card.Rank.Eight.rankBit | Card.Rank.Seven.rankBit | Card.Rank.Six.rankBit),
-			UInt(Card.Rank.Nine.rankBit | Card.Rank.Eight.rankBit | Card.Rank.Seven.rankBit | Card.Rank.Six.rankBit | Card.Rank.Five.rankBit),
-			UInt(Card.Rank.Eight.rankBit | Card.Rank.Seven.rankBit | Card.Rank.Six.rankBit | Card.Rank.Five.rankBit | Card.Rank.Four.rankBit),
-			UInt(Card.Rank.Seven.rankBit | Card.Rank.Six.rankBit | Card.Rank.Five.rankBit | Card.Rank.Four.rankBit | Card.Rank.Three.rankBit),
+			UInt(Card.Rank.king.rankBit | Card.Rank.queen.rankBit | Card.Rank.jack.rankBit | Card.Rank.ten.rankBit | Card.Rank.nine.rankBit),
+			UInt(Card.Rank.queen.rankBit | Card.Rank.jack.rankBit | Card.Rank.ten.rankBit | Card.Rank.nine.rankBit | Card.Rank.eight.rankBit),
+			UInt(Card.Rank.jack.rankBit | Card.Rank.ten.rankBit | Card.Rank.nine.rankBit | Card.Rank.eight.rankBit | Card.Rank.seven.rankBit),
+			UInt(Card.Rank.ten.rankBit | Card.Rank.nine.rankBit | Card.Rank.eight.rankBit | Card.Rank.seven.rankBit | Card.Rank.six.rankBit),
+			UInt(Card.Rank.nine.rankBit | Card.Rank.eight.rankBit | Card.Rank.seven.rankBit | Card.Rank.six.rankBit | Card.Rank.five.rankBit),
+			UInt(Card.Rank.eight.rankBit | Card.Rank.seven.rankBit | Card.Rank.six.rankBit | Card.Rank.five.rankBit | Card.Rank.four.rankBit),
+			UInt(Card.Rank.seven.rankBit | Card.Rank.six.rankBit | Card.Rank.five.rankBit | Card.Rank.four.rankBit | Card.Rank.three.rankBit),
 			To6StraightMask,
 			A5StraightMask
 		]

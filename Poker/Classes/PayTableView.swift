@@ -17,7 +17,7 @@ class PayTableView : UIView {
 		}
 	}
 	
-	var category : Hand.Category = Hand.Category.None {
+	var category : Hand.Category = Hand.Category.none {
 		didSet(oldCategory) {
 			self.setNeedsDisplay()
 		}
@@ -70,7 +70,7 @@ class PayTableView : UIView {
 			UIColor(hue: 120.0 / 360.0, saturation: 1.00, brightness: 0.50, alpha: 0.75).set()
 			UIRectFillUsingBlendMode(columnFrame, .screen)
 		}
-		if self.category != Hand.Category.None {
+		if self.category != Hand.Category.none {
 			let catFrame		= rowFrame.offsetBy(dx: 0.0, dy: rowFrame.height * CGFloat(Hand.Category.NumCategories - (self.category.rawValue + 1)))
 			
 			UIColor(hue: 120.0 / 360.0, saturation: 1.00, brightness: 0.50, alpha: 0.75).set()

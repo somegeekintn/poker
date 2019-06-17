@@ -63,7 +63,7 @@ class GameController: UIViewController {
 			if let cardViews = self.cardViews {
 				switch newState {
 					case .Ready:
-						self.paytableView.category = Hand.Category.None
+						self.paytableView.category = .none
 						for cardView in cardViews {
 							cardView.card = nil
 							cardView.revealed = false
@@ -150,7 +150,7 @@ class GameController: UIViewController {
 	func positionCards(position: UIRectEdge, animated: Bool = false, completion: (() -> ())?) {
 		var offset			: CGFloat = 0.0
 		
-		if position != [] {
+		if !position.isEmpty {
 			offset = self.cardContainer.frame.width
 			
 			if position == UIRectEdge.left {
@@ -163,7 +163,7 @@ class GameController: UIViewController {
 			UIView.animate(withDuration: 0.25, animations: {
 				self.cardContainer.layoutIfNeeded()
 			}, completion: { (finished: Bool) -> () in
-				if position != [] {
+				if !position.isEmpty {
 					self.resetAllCards()
 				}
 				if let completion = completion {
@@ -172,7 +172,7 @@ class GameController: UIViewController {
 			})
 		}
 		else {
-			if position != [] {
+			if !position.isEmpty {
 				self.resetAllCards()
 			}
 			self.cardContainer.layoutIfNeeded()

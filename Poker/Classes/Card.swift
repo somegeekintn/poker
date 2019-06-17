@@ -45,11 +45,11 @@ class Card : Comparable, CustomStringConvertible {
 	// MARK: - Rank
 	
 	enum Rank: Int, Comparable, CustomStringConvertible {
-		case Two = 0, Three, Four, Five, Six, Seven, Eight, Nine, Ten
-		case Jack, Queen, King, Ace
+		case two = 0, three, four, five, six, seven, eight, nine, ten
+		case jack, queen, king, ace
 
-		static let MinRank	= Two
-		static let MaxRank	= Ace
+		static let MinRank	= two
+		static let MaxRank	= ace
 		static let NumRanks	= MaxRank.rawValue + 1
 		
 		var identifier		: String { return self.description }
@@ -57,17 +57,17 @@ class Card : Comparable, CustomStringConvertible {
 		var description		: String {
 			get {
 				switch self {
-					case .Ace:
+					case .ace:
 						return "A"
-					case .King:
+					case .king:
 						return "K"
-					case .Queen:
+					case .queen:
 						return "Q"
-					case .Jack:
+					case .jack:
 						return "J"
-					case .Ten:
+					case .ten:
 						return "T"
-					case let someRank where someRank.rawValue >= Rank.Two.rawValue && someRank.rawValue <= Rank.Nine.rawValue:
+					case let someRank where someRank.rawValue >= Rank.two.rawValue && someRank.rawValue <= Rank.nine.rawValue:
 						return String(someRank.rawValue + 2)
 					default:
 						return "?"
@@ -78,15 +78,15 @@ class Card : Comparable, CustomStringConvertible {
 		var fullDescription	: String {
 			get {
 				switch self {
-					case .Ace:
+					case .ace:
 						return "Ace"
-					case .King:
+					case .king:
 						return "King"
-					case .Queen:
+					case .queen:
 						return "Queen"
-					case .Jack:
+					case .jack:
 						return "Jack"
-					case let someRank where someRank.rawValue >= Rank.Two.rawValue && someRank.rawValue <= Rank.Nine.rawValue:
+					case let someRank where someRank.rawValue >= Rank.two.rawValue && someRank.rawValue <= Rank.nine.rawValue:
 						return String(someRank.rawValue + 2)
 					default:
 						return "?"
@@ -94,27 +94,27 @@ class Card : Comparable, CustomStringConvertible {
 			}
 		}
 
-		var nextHigher		: Rank? { return self != Rank.Ace ? Rank(rawValue: self.rawValue + 1) : nil }
-		var nextLower		: Rank? { return self != Rank.Two ? Rank(rawValue: self.rawValue - 1) : nil }
+		var nextHigher		: Rank? { return self != Rank.ace ? Rank(rawValue: self.rawValue + 1) : nil }
+		var nextLower		: Rank? { return self != Rank.two ? Rank(rawValue: self.rawValue - 1) : nil }
 	}
 
 	// MARK: - Suit
 
 	enum Suit: Int, CustomStringConvertible {
-		case Club = 0, Diamond, Heart, Spade
+		case club = 0, diamond, heart, spade
 		
-		static let MinSuit		= Club
-		static let MaxSuit		= Spade
+		static let MinSuit		= club
+		static let MaxSuit		= spade
 		static let NumSuits		= MaxSuit.rawValue + 1
 
 		var shiftVal			: UInt64 { return UInt64(self.rawValue * Card.Rank.NumRanks) }
 		var identifier			: String {
 			get {
 				switch self {
-					case .Club:		return "C"
-					case .Diamond:	return "D"
-					case .Heart:	return "H"
-					case .Spade:	return "S"
+					case .club:		return "C"
+					case .diamond:	return "D"
+					case .heart:	return "H"
+					case .spade:	return "S"
 				}
 			}
 		}
@@ -122,10 +122,10 @@ class Card : Comparable, CustomStringConvertible {
 		var description			: String {
 			get {
 				switch self {
-					case .Club:		return "♣︎"
-					case .Diamond:	return "♦︎"
-					case .Heart:	return "♥︎"
-					case .Spade:	return "♠︎"
+					case .club:		return "♣︎"
+					case .diamond:	return "♦︎"
+					case .heart:	return "♥︎"
+					case .spade:	return "♠︎"
 				}
 			}
 		}
@@ -133,10 +133,10 @@ class Card : Comparable, CustomStringConvertible {
 		var fullDescription		: String {
 			get {
 				switch self {
-					case .Club:		return "Club"
-					case .Diamond:	return "Diamond"
-					case .Heart:	return "Heart"
-					case .Spade:	return "Spade"
+					case .club:		return "Club"
+					case .diamond:	return "Diamond"
+					case .heart:	return "Heart"
+					case .spade:	return "Spade"
 				}
 			}
 		}

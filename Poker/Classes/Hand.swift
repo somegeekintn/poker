@@ -85,7 +85,7 @@ class Hand : CustomStringConvertible {
 	}
 
 	func evaluate() -> Category {
-		var	category		= Category.None
+		var	category		= Category.none
 		var	sortedCards		= self.cards
 
 		if sortedCards.count > 1 {	// at least 2 cards required to make a hand
@@ -109,7 +109,7 @@ class Hand : CustomStringConvertible {
 						if let nextExpected = lastCard.rank.nextLower {
 							if card.rank != nextExpected {
 								// test special case for the ace. if last was an ace, this card should be a five
-								if lastCard.rank != Card.Rank.Ace || card.rank != Card.Rank.Five {
+								if lastCard.rank != Card.Rank.ace || card.rank != Card.Rank.five {
 									isStraight = false
 								}
 							}
@@ -142,7 +142,7 @@ class Hand : CustomStringConvertible {
 			// --->>> Straight Flush?
 			if isFlush && isStraight {
 				sortedCards.forEach { $0.pin = true }		// pin all
-				category = sortedCards[0].rank == Card.Rank.Ace ? Category.RoyalFlush : Category.StraightFlush
+				category = sortedCards[0].rank == Card.Rank.ace ? .royalFlush : .straightFlush
 			}
 			else {
 				let highestRankCount	= sortedRanks[0].count
@@ -150,35 +150,35 @@ class Hand : CustomStringConvertible {
 				if highestRankCount == 4 {
 					sortedRanks[0].forEach { $0.pin = true }
 					
-					category = Category.FourOfAKind
+					category = .fourOfAKind
 				}
 				else {
 					if highestRankCount == 3 && sortedRanks[1].count == 2 {
 						sortedRanks[0].forEach { $0.pin = true }
 						sortedRanks[1].forEach { $0.pin = true }
-						category = Category.FullHouse
+						category = .fullHouse
 					}
 					else if isFlush {
 						sortedCards.forEach { $0.pin = true }	// pin all
-						category = Category.Flush
+						category = .flush
 					}
 					else if isStraight {
 						sortedCards.forEach { $0.pin = true }	// pin all
-						category = Category.Straight
+						category = .straight
 					}
 					else if highestRankCount == 3 {
 						sortedRanks[0].forEach { $0.pin = true }
-						category = Category.ThreeOfAKind
+						category = .threeOfAKind
 					}
 					else if highestRankCount == 2 {
 						if sortedRanks[1].count == 2 {
 							sortedRanks[0].forEach { $0.pin = true }
 							sortedRanks[1].forEach { $0.pin = true }
-							category = Category.TwoPair
+							category = .twoPair
 						}
-						else if sortedRanks[0][0].rank >= Card.Rank.Jack {
+						else if sortedRanks[0][0].rank >= .jack {
 							sortedRanks[0].forEach { $0.pin = true }
-							category = Category.JacksOrBetter
+							category = .jacksOrBetter
 						}
 					}
 				}
@@ -213,28 +213,28 @@ class Hand : CustomStringConvertible {
 				
 				while straightMask >= Consts.Hands.To6StraightMask {		// >= 0x001f
 					if suitRankBits == straightMask {
-						return suitRankBits == Consts.Hands.RoyalStraightMask ? Category.RoyalFlush : Category.StraightFlush
+						return suitRankBits == Consts.Hands.RoyalStraightMask ? .royalFlush : .straightFlush
 					}
 					straightMask >>= 1
 				}
 				
 				if suitRankBits == Consts.Hands.A5StraightMask {		// 0x100f
-					return Category.StraightFlush
+					return .straightFlush
 				}
 				
 				if suitRankBits.bitCount() == Consts.Game.MaxHandCards {
 					// if we have a flush that isn't a straight, the only higher hand is 4 of a kind or a full house which we can't have if we have a flush
-					return Category.Flush
+					return .flush
 				}
 			
 				// Why not use an array like a sane person? Well, arrays are slow and I've been unable to find a way to make them
 				// as fast as I'd like. Also, assigning here using this switch is fractionally quicker than shifting and masking
 				// later on
 				switch rawSuit {
-					case Card.Suit.Club.rawValue:		cBits = suitRankBits
-					case Card.Suit.Diamond.rawValue:	dBits = suitRankBits
-					case Card.Suit.Heart.rawValue:		hBits = suitRankBits
-					case Card.Suit.Spade.rawValue:		sBits = suitRankBits
+					case Card.Suit.club.rawValue:		cBits = suitRankBits
+					case Card.Suit.diamond.rawValue:	dBits = suitRankBits
+					case Card.Suit.heart.rawValue:		hBits = suitRankBits
+					case Card.Suit.spade.rawValue:		sBits = suitRankBits
 					default:							break
 				}
 			}
@@ -242,7 +242,7 @@ class Hand : CustomStringConvertible {
 		}
 		
 		if (cBits & dBits & hBits & sBits) != 0 {
-			return Category.FourOfAKind
+			return .fourOfAKind
 		}
 		else {
 			let match3		= (cBits & dBits & hBits) | (cBits & dBits & sBits)	| (cBits & hBits & sBits) | (dBits & hBits & sBits)
@@ -252,7 +252,7 @@ class Hand : CustomStringConvertible {
 			match2 &= ~match3
 
 			if match3 != 0 && match2 != 0 {
-				return Category.FullHouse
+				return .fullHouse
 			}
 			else {
 				var straightMask	= Consts.Hands.RoyalStraightMask		// 0x1f00
@@ -260,28 +260,28 @@ class Hand : CustomStringConvertible {
 				
 				while straightMask >= Consts.Hands.To6StraightMask {		// >= 0x001f
 					if allSuits == straightMask {
-						return Category.Straight
+						return .straight
 					}
 					straightMask >>= 1
 				}
 				
 				if allSuits == Consts.Hands.A5StraightMask {				// 0x100f
-					return Category.Straight
+					return .straight
 				}
 				
 				if match3 != 0 {
-					return Category.ThreeOfAKind
+					return .threeOfAKind
 				}
 				else {
 					let pairCount = match2.bitCount()
 					
 					if pairCount != 0 {
 						if pairCount > 1 {
-							return Category.TwoPair
+							return .twoPair
 						}
 						else {
-							if match2 >= Card.Rank.Jack.rankBit {
-								return Category.JacksOrBetter
+							if match2 >= Card.Rank.jack.rankBit {
+								return .jacksOrBetter
 							}
 						}
 					}
@@ -289,39 +289,39 @@ class Hand : CustomStringConvertible {
 			}
 		}
 		
-		return Category.None
+		return .none
 	}
 	
 	/* --- Category --- */
 
 	enum Category: Int, CustomStringConvertible {
-		case None = 0
-		case JacksOrBetter
-		case TwoPair
-		case ThreeOfAKind
-		case Straight
-		case Flush
-		case FullHouse
-		case FourOfAKind
-		case StraightFlush
-		case RoyalFlush
+		case none = 0
+		case jacksOrBetter
+		case twoPair
+		case threeOfAKind
+		case straight
+		case flush
+		case fullHouse
+		case fourOfAKind
+		case straightFlush
+		case royalFlush
 
-		static let WinningCategories	= [RoyalFlush, StraightFlush, FourOfAKind, FullHouse, Flush, Straight, ThreeOfAKind, TwoPair, JacksOrBetter]
-		static let NumCategories		= RoyalFlush.rawValue + 1
+		static let WinningCategories	= [royalFlush, straightFlush, fourOfAKind, fullHouse, flush, straight, threeOfAKind, twoPair, jacksOrBetter]
+		static let NumCategories		= royalFlush.rawValue + 1
 		
 		var description: String {
 			get {
 				switch self {
-					case .None:				return "None"
-					case .JacksOrBetter:	return "Jacks or Better"
-					case .TwoPair:			return "Two Pair"
-					case .ThreeOfAKind:		return "Three of a Kind"
-					case .Straight:			return "Straight"
-					case .Flush:			return "Flush"
-					case .FullHouse:		return "Full House"
-					case .FourOfAKind:		return "Four of a Kind"
-					case .StraightFlush:	return "Straight Flush"
-					case .RoyalFlush:		return "Royal Flush"
+					case .none:				return "None"
+					case .jacksOrBetter:	return "Jacks or Better"
+					case .twoPair:			return "Two Pair"
+					case .threeOfAKind:		return "Three of a Kind"
+					case .straight:			return "Straight"
+					case .flush:			return "Flush"
+					case .fullHouse:		return "Full House"
+					case .fourOfAKind:		return "Four of a Kind"
+					case .straightFlush:	return "Straight Flush"
+					case .royalFlush:		return "Royal Flush"
 				}
 			}
 		}
@@ -330,30 +330,20 @@ class Hand : CustomStringConvertible {
 			var payout = 0
 			
 			switch self {
-				case .None:
-					payout = 0
-				case .JacksOrBetter:
-					payout = 1
-				case .TwoPair:
-					payout = 2
-				case .ThreeOfAKind:
-					payout = 3
-				case .Straight:
-					payout = 4
-				case .Flush:
-					payout = 6
-				case .FullHouse:
-					payout = 9
-				case .FourOfAKind:
-					payout = 25
-				case .StraightFlush:
-					payout = 50
-				case .RoyalFlush:
-					payout = 250
+				case .none:				payout = 0
+				case .jacksOrBetter:	payout = 1
+				case .twoPair:			payout = 2
+				case .threeOfAKind:		payout = 3
+				case .straight:			payout = 4
+				case .flush:			payout = 6
+				case .fullHouse:		payout = 9
+				case .fourOfAKind:		payout = 25
+				case .straightFlush:	payout = 50
+				case .royalFlush:		payout = 250
 			}
 			
 			payout *= bet
-			if self == .RoyalFlush && bet == 5 {
+			if self == .royalFlush && bet == 5 {
 				payout = 4000
 			}
 			
