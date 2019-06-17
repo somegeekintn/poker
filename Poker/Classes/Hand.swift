@@ -8,8 +8,8 @@
 
 import Swift
 
-class Hand : Printable {
-	private var cardSlots	: [Card?]
+class Hand : CustomStringConvertible {
+	private var cardSlots	= [Card?](repeating: nil, count: Consts.Game.MaxHandCards)
 	
     var description: String {
 		get {
@@ -48,10 +48,6 @@ class Hand : Printable {
 		}
 	}
 
-	init() {
-		self.cardSlots = [Card?](count: Consts.Game.MaxHandCards, repeatedValue: nil)
-	}
-	
     subscript (position: Int) -> Card? {
 		get {
 			return self.cardSlots[position]
@@ -61,13 +57,13 @@ class Hand : Printable {
 		}
 	}
 
-	func initialDrawFromDeck(deck: Deck) {
-		self.cardSlots = [Card?](count: Consts.Game.MaxHandCards, repeatedValue: nil)
+	func initialDrawFromDeck(_ deck: Deck) {
+		self.cardSlots = [Card?](repeating: nil, count: Consts.Game.MaxHandCards)
 		self.drawFromDeck(deck)
 	}
 	
-	func drawFromDeck(deck: Deck) {
-		for (index, value) in enumerate(self.cardSlots) {
+	func drawFromDeck(_ deck: Deck) {
+		for (index, value) in self.cardSlots.enumerated() {
 			if (value == nil || !value!.hold) {
 				self.cardSlots[index] = deck.drawCard()
 			}
@@ -96,8 +92,8 @@ class Hand : Printable {
 			var isStraight		: Bool = true
 			var isFlush			: Bool
 			var lastCard		: Card? = nil
-			var sortedRanks		= [[Card]](count: Card.Rank.NumRanks, repeatedValue: [Card]())
-			var sortedSuits		= [[Card]](count: Card.Suit.NumSuits, repeatedValue: [Card]())
+			var sortedRanks		= [[Card]](repeating: [Card](), count: Card.Rank.NumRanks)
+			var sortedSuits		= [[Card]](repeating: [Card](), count: Card.Suit.NumSuits)
 			
 			sortedCards.sort{ $0 > $1 }
 			for card in sortedCards {
@@ -110,7 +106,7 @@ class Hand : Printable {
 				// --->>> straight test
 				if (isStraight) {
 					if let lastCard = lastCard {
-						if let nextExpected = lastCard.rank.nextLower() {
+						if let nextExpected = lastCard.rank.nextLower {
 							if card.rank != nextExpected {
 								// test special case for the ace. if last was an ace, this card should be a five
 								if lastCard.rank != Card.Rank.Ace || card.rank != Card.Rank.Five {
@@ -145,44 +141,43 @@ class Hand : Printable {
 			
 			// --->>> Straight Flush?
 			if isFlush && isStraight {
-				sortedCards.iterate { $0.pin = true }	// pin all
+				sortedCards.forEach { $0.pin = true }		// pin all
 				category = sortedCards[0].rank == Card.Rank.Ace ? Category.RoyalFlush : Category.StraightFlush
 			}
 			else {
 				let highestRankCount	= sortedRanks[0].count
 				
 				if highestRankCount == 4 {
-					sortedRanks[0].iterate { $0.pin = true }
-					for card in sortedRanks[0] { card.pin = true }
+					sortedRanks[0].forEach { $0.pin = true }
 					
 					category = Category.FourOfAKind
 				}
 				else {
 					if highestRankCount == 3 && sortedRanks[1].count == 2 {
-						sortedRanks[0].iterate { $0.pin = true }
-						sortedRanks[1].iterate { $0.pin = true }
+						sortedRanks[0].forEach { $0.pin = true }
+						sortedRanks[1].forEach { $0.pin = true }
 						category = Category.FullHouse
 					}
 					else if isFlush {
-						sortedCards.iterate { $0.pin = true }	// pin all
+						sortedCards.forEach { $0.pin = true }	// pin all
 						category = Category.Flush
 					}
 					else if isStraight {
-						sortedCards.iterate { $0.pin = true }	// pin all
+						sortedCards.forEach { $0.pin = true }	// pin all
 						category = Category.Straight
 					}
 					else if highestRankCount == 3 {
-						sortedRanks[0].iterate { $0.pin = true }
+						sortedRanks[0].forEach { $0.pin = true }
 						category = Category.ThreeOfAKind
 					}
 					else if highestRankCount == 2 {
 						if sortedRanks[1].count == 2 {
-							sortedRanks[0].iterate { $0.pin = true }
-							sortedRanks[1].iterate { $0.pin = true }
+							sortedRanks[0].forEach { $0.pin = true }
+							sortedRanks[1].forEach { $0.pin = true }
 							category = Category.TwoPair
 						}
 						else if sortedRanks[0][0].rank >= Card.Rank.Jack {
-							sortedRanks[0].iterate { $0.pin = true }
+							sortedRanks[0].forEach { $0.pin = true }
 							category = Category.JacksOrBetter
 						}
 					}
@@ -211,7 +206,7 @@ class Hand : Printable {
 		
 		workBits = rankBits
 		for rawSuit in 0..<4 {
-			var suitRankBits	= UInt(workBits & Consts.Hands.SuitMask64)
+			let suitRankBits	= UInt(workBits & Consts.Hands.SuitMask64)
 			
 			if suitRankBits != 0 {
 				var straightMask	= Consts.Hands.RoyalStraightMask		// 0x1f00
@@ -261,7 +256,7 @@ class Hand : Printable {
 			}
 			else {
 				var straightMask	= Consts.Hands.RoyalStraightMask		// 0x1f00
-				var	allSuits		= cBits | dBits | hBits | sBits
+				let	allSuits		= cBits | dBits | hBits | sBits
 				
 				while straightMask >= Consts.Hands.To6StraightMask {		// >= 0x001f
 					if allSuits == straightMask {
@@ -278,7 +273,7 @@ class Hand : Printable {
 					return Category.ThreeOfAKind
 				}
 				else {
-					var pairCount = match2.bitCount()
+					let pairCount = match2.bitCount()
 					
 					if pairCount != 0 {
 						if pairCount > 1 {
@@ -299,7 +294,7 @@ class Hand : Printable {
 	
 	/* --- Category --- */
 
-	enum Category: Int, Printable {
+	enum Category: Int, CustomStringConvertible {
 		case None = 0
 		case JacksOrBetter
 		case TwoPair
@@ -317,31 +312,21 @@ class Hand : Printable {
 		var description: String {
 			get {
 				switch self {
-					case .None:
-						return "None"
-					case .JacksOrBetter:
-						return "Jacks or Better"
-					case .TwoPair:
-						return "Two Pair"
-					case .ThreeOfAKind:
-						return "Three of a Kind"
-					case .Straight:
-						return "Straight"
-					case .Flush:
-						return "Flush"
-					case .FullHouse:
-						return "Full House"
-					case .FourOfAKind:
-						return "Four of a Kind"
-					case .StraightFlush:
-						return "Straight Flush"
-					case .RoyalFlush:
-						return "Royal Flush"
+					case .None:				return "None"
+					case .JacksOrBetter:	return "Jacks or Better"
+					case .TwoPair:			return "Two Pair"
+					case .ThreeOfAKind:		return "Three of a Kind"
+					case .Straight:			return "Straight"
+					case .Flush:			return "Flush"
+					case .FullHouse:		return "Full House"
+					case .FourOfAKind:		return "Four of a Kind"
+					case .StraightFlush:	return "Straight Flush"
+					case .RoyalFlush:		return "Royal Flush"
 				}
 			}
 		}
 		
-		func payoutForBet(bet: Int) -> Int {
+		func payoutForBet(_ bet: Int) -> Int {
 			var payout = 0
 			
 			switch self {

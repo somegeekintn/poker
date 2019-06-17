@@ -8,10 +8,13 @@
 
 import Foundation
 
-class Game : Printable {
-	typealias betCallback = (newBet: Int) -> ()
-	typealias evCallback = (newEv: Double?) -> ()
-	typealias stateCallback = (newState: State) -> ()
+class Game : CustomStringConvertible {
+	typealias betCallback = (_ nnewBet: Int) -> ()
+	typealias evCallback = (_ newEv: Double?) -> ()
+	typealias stateCallback = (_ newState: State) -> ()
+
+	static var shared			= Game()
+	class var maxBet			: Int { return 5 }
 
 	var deck					= Deck()
 	var hand					= Hand()
@@ -21,51 +24,16 @@ class Game : Printable {
 	var evHandler				: evCallback? = nil
 	var stateHandler			: stateCallback? = nil
 	var lastWin					: Int = 0
-	
-	class func sharedGame() -> Game! {
-		struct Static {
-			static var sSharedGame	: Game? = nil
-			static var sOnceToken	: dispatch_once_t = 0
-		}
 
-		dispatch_once(&Static.sOnceToken) {
-			Static.sSharedGame = self()
-		}
-		
-		return Static.sSharedGame
-	}
-	
-	class func maxBet() -> Int {
-		return 5
-	}
-	
-	// MARK: - Var
-
-	var description: String {
-		get {
-			var desc = String()
-			
-			desc += "deck: \(self.deck)\n"
-			desc += "hand: \(self.hand)\n"
-			desc += "state: \(self.state)\n"
-			desc += "bet: \(self.actualBet)"
-
-			return desc
-		}
-	}
-	
-	var actualBet : Int = 0 {
+	var actualBet				: Int = 0 {
 		didSet(oldValue) {
-			if var betHandler = self.betHandler {
-				betHandler(newBet: self.bet)
-			}
+			self.betHandler?(self.bet)
 		}
 	}
 	
-    var bet : Int {
-		// Swift's handling of getters / setters leaves something to be desired
+    var bet						: Int {
 		set (newValue) {
-			var actualValue		= (newValue > Game.maxBet()) ? Game.maxBet() : newValue
+			var actualValue		= (newValue > Game.maxBet) ? Game.maxBet : newValue
 			var betDelta		= actualValue - self.actualBet
 			
 			if (betDelta > self.credits) {
@@ -78,7 +46,7 @@ class Game : Printable {
 			}
 			
 			if self.actualBet != actualValue {
-				self.gameData?.betCredits(betDelta)
+				self.gameData?.betCredits(amount: betDelta)
 				self.actualBet = actualValue
 			}
 		}
@@ -98,7 +66,7 @@ class Game : Printable {
 		var credits = 0
 		
 		if let gameData = self.gameData {
-			credits = gameData.credits.integerValue
+			credits = gameData.credits.intValue
 		}
 		
 		return credits
@@ -106,8 +74,8 @@ class Game : Printable {
 	
 	var ev : Double? = nil {
 		willSet(newValue) {
-			if var evHandler = self.evHandler {
-				dispatch_async(dispatch_get_main_queue()) { evHandler(newEv: newValue) }
+			if let evHandler = self.evHandler {
+				DispatchQueue.main.async { evHandler(newValue) }
 			}
 		}
 	}
@@ -123,29 +91,40 @@ class Game : Printable {
 				self.calculateEV()
 			}
 			
-			if var stateHandler = self.stateHandler {
-				stateHandler(newState: newValue)
-			}
+			self.stateHandler?(newValue)
 		}
 	}
 	
+	var description: String {
+		get {
+			var desc = String()
+			
+			desc += "deck: \(self.deck)\n"
+			desc += "hand: \(self.hand)\n"
+			desc += "state: \(self.state)\n"
+			desc += "bet: \(self.actualBet)"
+
+			return desc
+		}
+	}
+
 	// MARK: - Lifecycle
 	
 	required init() {
 		self.gameData = GameData.gameData()
 		
-		NSNotificationCenter.defaultCenter().addObserverForName(Consts.Notifications.RefreshEV, object: nil, queue: nil) { (notification : NSNotification!) in
-			self.calculateEV()
+		NotificationCenter.default.addObserver(forName: NSNotification.Name(Consts.Notifications.RefreshEV), object: nil, queue: nil) { [weak self] _ in
+			self?.calculateEV()
 		}
 	}
 	
 	deinit {
-		NSNotificationCenter.defaultCenter().removeObserver(self)
+		NotificationCenter.default.removeObserver(self)
 	}
 	
 	// MARK: - Betting
 	
-	func incrementBet(amount: Int = Game.maxBet()) {
+	func incrementBet(amount: Int = Game.maxBet) {
 		if self.state == State.Complete {
 			self.state = State.Ready
 		}
@@ -154,7 +133,7 @@ class Game : Printable {
 	}
 	
 	func betMax() {
-		self.incrementBet(amount: Game.maxBet())
+		self.incrementBet(amount: Game.maxBet)
 	}
 	
 	// MARK: - Cards
@@ -163,7 +142,7 @@ class Game : Printable {
 		return self.hand[cardIndex]
 	}
 	
-	func deal() -> Bool {
+	@discardableResult func deal() -> Bool {
 		var dealt	: Bool = false
 		
 		if self.canDeal {
@@ -176,18 +155,17 @@ class Game : Printable {
 		return dealt
 	}
 
-	func draw() -> Bool {
+	@discardableResult func draw() -> Bool {
 		var drew	: Bool = false
 		
 		if self.state == State.Dealt {
-			var winAmount		= 0
 			var handCategory	: Hand.Category
 			
 			self.hand.drawFromDeck(self.deck)
 			handCategory = self.hand.evaluate()
 			self.lastWin = handCategory.payoutForBet(self.actualBet)
 			if self.lastWin > 0 {
-				self.gameData?.winCredits(self.lastWin)
+				self.gameData?.winCredits(amount: self.lastWin)
 			}
 			self.state = State.Complete
 			drew = true
@@ -199,32 +177,32 @@ class Game : Printable {
 	func calculateEV() {
 		if self.evCalcState != EvCalcState.Stopped {
 			self.evCalcState = EvCalcState.Canceled
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.01 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { self.calculateEV() }
+			delay(0.1) { self.calculateEV() }
 		}
 		else {
 			self.ev = nil
 			self.evCalcState = EvCalcState.Running
-			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-				var heldCards	= self.hand.heldCards()
+			dispatch_async(.default) {
+				let heldCards	= self.hand.heldCards()
 //				var startTime	= NSDate()
 				
 				if heldCards.count < Consts.Game.MaxHandCards {
 					var iterator	: DeckIterator
-					var evHand		= Hand()
+					let evHand		= Hand()
 					var evCategory	: Hand.Category
 					var ev			: Double = 0
 					var count		= 0
 					
-					for (index, card) in enumerate(heldCards) {
+					for (index, card) in heldCards.enumerated() {
 						evHand[index] = card
 					}
 
 					iterator = DeckIterator(hand: evHand, deck: self.deck, drawCount: Consts.Game.MaxHandCards - heldCards.count)
-					while iterator.advanceWithHand(evHand, deck: self.deck) && self.evCalcState != EvCalcState.Canceled {
+					while iterator.advanceWithHand(hand: evHand, deck: self.deck) && self.evCalcState != EvCalcState.Canceled {
 						evCategory = evHand.fastEval()
 
 						ev += Double(evCategory.payoutForBet(self.actualBet))
-						count++
+						count += 1
 					}
 					
 					if self.evCalcState != EvCalcState.Canceled {
@@ -247,17 +225,17 @@ class Game : Printable {
 	
 	func stress() {
 		self.betMax()
-		for var idx=0; idx<100; idx++ {
+		for idx in 0..<100 {
 			self.deal()
 			if self.hand.evaluate() != Hand.Category.None {
-				println("\(idx): \(self)")
+				print("\(idx): \(self)")
 			}
 			
 			self.state = Game.State.Ready
 		}
 	}
 
-	enum State: Int, Printable {
+	enum State: Int, CustomStringConvertible {
 		case Ready
 		case Dealt
 		case Complete
@@ -265,12 +243,9 @@ class Game : Printable {
 		var description: String {
 			get {
 				switch self {
-					case .Ready:
-						return "Ready"
-					case .Dealt:
-						return "Deal Complete"
-					case .Complete:
-						return "Game Complete"
+					case .Ready:	return "Ready"
+					case .Dealt:	return "Deal Complete"
+					case .Complete:	return "Game Complete"
 				}
 			}
 		}

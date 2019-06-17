@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Quiet Spark. All rights reserved.
 //
 
-class DeckIterator : Printable {
+class DeckIterator : CustomStringConvertible {
 	var next			: DeckIterator?
-	var range			: Range<Int>
-	var generator		: RangeGenerator<Int>
+	var range			: ClosedRange<Int>
+	var generator		: IndexingIterator<ClosedRange<Int>>
 	var selection		: Int?
-	var handPosition	: Int
+	let handPosition	: Int
 	
     var description: String {
 		get {
-			var desc = "\(self.range.startIndex)..<\(self.range.endIndex): \(self.selection)"
+			var desc = "\(self.range.lowerBound)..<\(self.range.upperBound): \(self.selection?.description ?? "no selection" )"
 			
 			if let next = self.next {
 				desc += " | "
@@ -27,15 +27,15 @@ class DeckIterator : Printable {
 	}
 
 	init(hand: Hand, deck: Deck, drawCount: Int, endRange: Int = Consts.Game.MaxDeckCards - 1) {
-		var startPosition	= Consts.Game.MaxHandCards + (drawCount - 1)
+		let startPosition	= Consts.Game.MaxHandCards + (drawCount - 1)
 
 		self.handPosition = Consts.Game.MaxHandCards - drawCount
 		self.range = startPosition...endRange
-		self.generator = self.range.generate()
+		self.generator = self.range.makeIterator()
 		hand[self.handPosition] = deck[startPosition]
 		
 		if (drawCount > 1) {
-			var nextIterator	= DeckIterator(hand: hand, deck: deck, drawCount: drawCount - 1, endRange: endRange - 1)
+			let nextIterator	= DeckIterator(hand: hand, deck: deck, drawCount: drawCount - 1, endRange: endRange - 1)
 			
 			// prep next nextIterator
 			nextIterator.selection = nextIterator.generator.next()
@@ -52,11 +52,11 @@ class DeckIterator : Printable {
 		}
 		else {
 			if let next = self.next {
-				didAdvance = next.advanceWithHand(hand, deck: deck)
+				didAdvance = next.advanceWithHand(hand: hand, deck: deck)
 				
 				if didAdvance {
-					self.range = next.selection! + 1..<self.range.endIndex
-					self.generator = self.range.generate()
+					self.range = next.selection! + 1 ... self.range.upperBound
+					self.generator = self.range.makeIterator()
 					self.selection = self.generator.next()
 					hand[self.handPosition] = deck[self.selection!]
 				}

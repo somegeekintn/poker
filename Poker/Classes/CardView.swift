@@ -9,23 +9,20 @@
 import UIKit
 import QuartzCore
 
-class CardView: UIView {
+class CardView: UIView, CAAnimationDelegate {
 	@IBOutlet var cardImage		: UIImageView!
 	@IBOutlet var holdLabel		: UIView!
 	var enabled					: Bool = false
 	var card					: Card?
 	var revealed				: Bool = false
 	
-	required init(coder aDecoder: NSCoder) {
-		var tapRecognizer	: UITapGestureRecognizer
-		
+	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-		
-		tapRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
-		self.addGestureRecognizer(tapRecognizer)
+
+		self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(CardView.handleTap(_:))))
 	}
 	
-	func imageNameFor(card: Card) -> String {
+	func imageNameForCard(_ card: Card) -> String {
 		var imageName = "card_"
 		
 		imageName += card.rank.identifier + card.suit.identifier
@@ -34,13 +31,12 @@ class CardView: UIView {
 	}
 	
 	func update() {
-		if self.card != nil && self.revealed {
-			let card = self.card!
-			self.holdLabel.hidden = !card.hold
-			self.cardImage.image = UIImage(named: self.imageNameFor(card))
+		if let card = self.card, self.revealed {
+			self.holdLabel.isHidden = !card.hold
+			self.cardImage.image = UIImage(named: self.imageNameForCard(card))
 		}
 		else {
-			self.holdLabel.hidden = true
+			self.holdLabel.isHidden = true
 			self.cardImage.image = UIImage(named: "card_back")
 		}
 	}
@@ -60,9 +56,9 @@ class CardView: UIView {
 	func animatePinned() {
 		if let card = self.card {
 			if !card.pin {
-				UIView.animateWithDuration(Consts.Views.PinAnimationTime, animations: {
+				UIView.animate(withDuration: Consts.Views.PinAnimationTime) {
 					self.alpha = 0.40
-				})
+				}
 			}
 		}
 	}
@@ -71,52 +67,52 @@ class CardView: UIView {
 		self.alpha = 1.00
 	}
 	
-	func handleTap(recognizer: UIGestureRecognizer) {
+	@objc func handleTap(_ recognizer: UIGestureRecognizer) {
 		if self.enabled {
 			if let card = self.card {
 				card.hold = !card.hold
 				self.update()
 				
-				NSNotificationCenter.defaultCenter().postNotificationName(Consts.Notifications.RefreshEV, object: card)
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: Consts.Notifications.RefreshEV), object: card)
 			}
 		}
 	}
 	
 	func beginReveal(clockwise: Bool = true) {
-		var flipAnimation	= CABasicAnimation(keyPath: "transform")
+		let flipAnimation	= CABasicAnimation(keyPath: "transform")
 		var endTransform	= CATransform3DIdentity
-		var endAngle		= CGFloat(M_PI_2) * (clockwise ? 1.0 : -1.0)
+		let endAngle		= CGFloat.pi / (clockwise ? -2.0 : 2.0)
 		
 		endTransform.m34 = -1.0 / 500.0
 		endTransform = CATransform3DRotate(endTransform, endAngle, 0, 1, 0)
-		flipAnimation.fromValue = NSValue(CATransform3D: CATransform3DIdentity)
-		flipAnimation.toValue = NSValue(CATransform3D: endTransform)
+		flipAnimation.fromValue = NSValue(caTransform3D: CATransform3DIdentity)
+		flipAnimation.toValue = NSValue(caTransform3D: endTransform)
 		flipAnimation.duration = Consts.Views.RevealAnimationTime / 2.0
-		flipAnimation.setValue(NSNumber(bool: clockwise), forKey: "clockwise")
+		flipAnimation.setValue(NSNumber(value: clockwise), forKey: "clockwise")
 		flipAnimation.delegate = self
 		self.cardImage.layer.transform = endTransform
-		self.cardImage.layer.addAnimation(flipAnimation, forKey: "begin_reveal")
+		self.cardImage.layer.add(flipAnimation, forKey: "begin_reveal")
 	}
 	
 	func finishReveal(clockwise: Bool = true) {
-		var flipAnimation	= CABasicAnimation(keyPath: "transform")
+		let flipAnimation	= CABasicAnimation(keyPath: "transform")
 		var startTransform	= CATransform3DIdentity
-		var endTransform	= CATransform3DIdentity
-		var startAngle		= CGFloat(M_PI_2) * (clockwise ? -1.0 : 1.0)
+		let endTransform	= CATransform3DIdentity
+		let startAngle		= CGFloat.pi / (clockwise ? -2.0 : 2.0)
 		
 		self.update()
 		startTransform.m34 = -1.0 / 500.0
 		startTransform = CATransform3DRotate(startTransform, startAngle, 0, 1, 0)
-		flipAnimation.fromValue = NSValue(CATransform3D: startTransform)
-		flipAnimation.toValue = NSValue(CATransform3D: endTransform)
+		flipAnimation.fromValue = NSValue(caTransform3D: startTransform)
+		flipAnimation.toValue = NSValue(caTransform3D: endTransform)
 		flipAnimation.duration = Consts.Views.RevealAnimationTime / 2.0
 		self.cardImage.layer.transform = endTransform
-		self.cardImage.layer.addAnimation(flipAnimation, forKey: "end_reveal")
+		self.cardImage.layer.add(flipAnimation, forKey: "end_reveal")
 	}
 	
-    override func animationDidStop(animation: CAAnimation!, finished flag: Bool) {
-		if let clockwise = animation.valueForKey("clockwise") as? NSNumber {
-			self.finishReveal(clockwise: clockwise.boolValue)
-		}
+	func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+		guard let clockwise = anim.value(forKey: "clockwise") as? NSNumber else { return }
+		
+		self.finishReveal(clockwise: clockwise.boolValue)
 	}
 }

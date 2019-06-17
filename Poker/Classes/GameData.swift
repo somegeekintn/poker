@@ -16,45 +16,36 @@ class GameData: NSManagedObject {
     @NSManaged var totalWon		: NSNumber
 	
     class func gameData() -> GameData? {
-		var gameData		: GameData?
-		var appDelegate		= UIApplication.sharedApplication().delegate as! AppDelegate?
+		guard let appDelegate	= UIApplication.shared.delegate as? AppDelegate else { return nil }
+		guard let context		= appDelegate.managedObjectContext else { return nil }
+		let request				= NSFetchRequest<GameData>(entityName: "GameData")
+		var gameData			: GameData?
 		
-		if let appDelegate = appDelegate {
-			if let context = appDelegate.managedObjectContext {
-				var request =	NSFetchRequest(entityName: "GameData")
-				
-				if let results = context.executeFetchRequest(request, error: nil) {
-					gameData = results.first as? GameData
-				}
-
-				if gameData == nil {
-					gameData = NSEntityDescription.insertNewObjectForEntityForName("GameData", inManagedObjectContext: context) as? GameData
-					gameData?.credits = 1000
-					appDelegate.saveContext()
-				}
-			}
+		if let results = try? context.fetch(request), results.count > 0 {
+			gameData = results[0]
+		}
+		else {
+			gameData = NSEntityDescription.insertNewObject(forEntityName: "GameData", into: context) as? GameData
+			gameData?.credits = 1000
+			appDelegate.saveContext()
 		}
 		
 		return gameData
 	}
 	
 	func saveData() {
-		var appDelegate		= UIApplication.sharedApplication().delegate as! AppDelegate?
-		
-		if let appDelegate = appDelegate {
-			appDelegate.saveContext()
-		}
+		(UIApplication.shared.delegate as? AppDelegate)?.saveContext()
 	}
 	
 	func betCredits(amount: Int) {
-		self.credits = self.credits.integerValue - amount
-		self.totalBet = self.totalBet.integerValue + amount
+		self.credits = NSNumber(value: self.credits.intValue - amount)
+		self.totalBet = NSNumber(value: self.totalBet.intValue + amount)
 		self.saveData()
 	}
 	
 	func winCredits(amount: Int) {
-		self.credits = self.credits.integerValue + amount
-		self.totalWon = self.totalWon.integerValue + amount
+		self.credits = NSNumber(value: self.credits.intValue + amount)
+		self.totalWon = NSNumber(value: self.totalWon.intValue + amount)
 		self.saveData()
 	}
 }

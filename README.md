@@ -5,4 +5,4 @@ Using this simple video poker app both as a means of gaining some practical Swif
 
 Casey
 
-![Screenshot](https://github.com/somegeekintn/poker/blob/master/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/somegeekintn/poker/master/screenshot.png)

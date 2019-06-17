@@ -19,8 +19,8 @@ struct Consts {
 	}
 	
 	struct Views {
-		static let PinAnimationTime		: NSTimeInterval = 0.50
-		static let RevealAnimationTime	: NSTimeInterval = 0.30
+		static let PinAnimationTime		: TimeInterval = 0.50
+		static let RevealAnimationTime	: TimeInterval = 0.30
 		static let CardViewTagStart		: Int = 1000
 	}
 	

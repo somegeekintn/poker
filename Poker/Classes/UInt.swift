@@ -13,7 +13,7 @@ extension UInt {
 		
 		while workVal != 0 {
 			workVal &= workVal - 1
-			count++
+			count += 1
 		}
 		
 		return count

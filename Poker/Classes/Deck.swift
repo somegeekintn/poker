@@ -9,7 +9,7 @@
 import Foundation
 import Swift
 
-class Deck : Printable {
+class Deck : CustomStringConvertible {
 	var cards		= [Card]()
 	var position	= 0
 	
@@ -43,26 +43,14 @@ class Deck : Printable {
 	}
 	
 	func shuffle() {
-		let cardCount	= self.cards.count
-		
 		self.position = 0
-		for var cardIdx=0; cardIdx<cardCount; cardIdx++ {
-			var targetIdx	: Int
-			var savedCard	: Card
-
-			do {
-				targetIdx = Int(arc4random_uniform(UInt32(cardCount)))
-			} while (targetIdx == cardIdx)
-
-			savedCard = self.cards[cardIdx]
-			self.cards[cardIdx] = self.cards[targetIdx]
-			self.cards[targetIdx] = savedCard
-		}
+		self.cards.shuffle()
 	}
 	
 	func drawCard() -> Card {
-		var card = self.cards[self.position++]
-
+		let card = self.cards[self.position]
+		
+		self.position += 1
 		card.reset()
 
 		return card
