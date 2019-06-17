@@ -9,6 +9,8 @@
 import Swift
 
 class Hand : CustomStringConvertible {
+	var cards				: [Card] { return self.cardSlots.compactMap({ $0 }) }
+	var heldCards			: [Card] { return self.cards.filter({ $0.hold })}
 	private var cardSlots	= [Card?](repeating: nil, count: Consts.Game.MaxHandCards)
 	
     var description: String {
@@ -31,20 +33,6 @@ class Hand : CustomStringConvertible {
 			}
 			
 			return desc
-		}
-	}
-	
-	var cards : [Card] {
-		get {
-			var	cards = [Card]()
-			
-			for card in self.cardSlots {
-				if let card = card {
-					cards.append(card)
-				}
-			}
-			
-			return cards
 		}
 	}
 
@@ -70,20 +58,6 @@ class Hand : CustomStringConvertible {
 		}
 	}
 	
-	func heldCards() -> [Card] {
-		var heldCards	= [Card]()
-		
-		for cardSlot in self.cardSlots {
-			if let card = cardSlot {
-				if card.hold {
-					heldCards.append(card)
-				}
-			}
-		}
-
-		return heldCards
-	}
-
 	func evaluate() -> Category {
 		var	category		= Category.none
 		var	sortedCards		= self.cards
@@ -95,7 +69,7 @@ class Hand : CustomStringConvertible {
 			var sortedRanks		= [[Card]](repeating: [Card](), count: Card.Rank.numRanks)
 			var sortedSuits		= [[Card]](repeating: [Card](), count: Card.Suit.numSuits)
 			
-			sortedCards.sort{ $0 > $1 }
+			sortedCards.sort { $0 > $1 }
 			for card in sortedCards {
 				// --->>> count ranks
 				sortedRanks[card.rank.rawValue].append(card)
@@ -218,7 +192,7 @@ class Hand : CustomStringConvertible {
 					straightMask >>= 1
 				}
 				
-				if suitRankBits == Consts.Hands.A5StraightMask {		// 0x100f
+				if suitRankBits == Consts.Hands.A5StraightMask {			// 0x100f
 					return .straightFlush
 				}
 				

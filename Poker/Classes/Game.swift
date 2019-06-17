@@ -170,7 +170,7 @@ class Game : CustomStringConvertible {
 			self.ev = nil
 			self.evCalcState = .running
 			dispatch_async(.default) {
-				let heldCards	= self.hand.heldCards()
+				let heldCards	= self.hand.heldCards
 //				var startTime	= NSDate()
 				
 				if heldCards.count < Consts.Game.MaxHandCards {

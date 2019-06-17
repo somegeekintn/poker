@@ -120,14 +120,11 @@ class GameController: UIViewController {
 
 	func resetViews() {
 		if self.cardViews == nil {
-			var cardViews	= [CardView]()
 			let viewTag		= Consts.Views.CardViewTagStart
+			let cardViews	= (viewTag..<viewTag + 5).compactMap({ self.view.viewWithTag($0) as? CardView })
 			
-			for cardTag in viewTag..<viewTag + 5 {
-				if let cardView = self.view.viewWithTag(cardTag) as? CardView {
-					cardViews.append(cardView)
-					cardView.update()
-				}
+			for cardView in cardViews {
+				cardView.update()
 			}
 			
 			self.cardViews = cardViews
