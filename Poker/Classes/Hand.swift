@@ -92,8 +92,8 @@ class Hand : CustomStringConvertible {
 			var isStraight		: Bool = true
 			var isFlush			: Bool
 			var lastCard		: Card? = nil
-			var sortedRanks		= [[Card]](repeating: [Card](), count: Card.Rank.NumRanks)
-			var sortedSuits		= [[Card]](repeating: [Card](), count: Card.Suit.NumSuits)
+			var sortedRanks		= [[Card]](repeating: [Card](), count: Card.Rank.numRanks)
+			var sortedSuits		= [[Card]](repeating: [Card](), count: Card.Suit.numSuits)
 			
 			sortedCards.sort{ $0 > $1 }
 			for card in sortedCards {
@@ -104,12 +104,12 @@ class Hand : CustomStringConvertible {
 				sortedSuits[card.suit.rawValue].append(card)
 
 				// --->>> straight test
-				if (isStraight) {
+				if isStraight {
 					if let lastCard = lastCard {
 						if let nextExpected = lastCard.rank.nextLower {
 							if card.rank != nextExpected {
 								// test special case for the ace. if last was an ace, this card should be a five
-								if lastCard.rank != Card.Rank.ace || card.rank != Card.Rank.five {
+								if lastCard.rank != .ace || card.rank != .five {
 									isStraight = false
 								}
 							}
@@ -142,7 +142,7 @@ class Hand : CustomStringConvertible {
 			// --->>> Straight Flush?
 			if isFlush && isStraight {
 				sortedCards.forEach { $0.pin = true }		// pin all
-				category = sortedCards[0].rank == Card.Rank.ace ? .royalFlush : .straightFlush
+				category = sortedCards[0].rank == .ace ? .royalFlush : .straightFlush
 			}
 			else {
 				let highestRankCount	= sortedRanks[0].count
@@ -205,7 +205,7 @@ class Hand : CustomStringConvertible {
 		}
 		
 		workBits = rankBits
-		for rawSuit in 0..<4 {
+		for suit in Card.Suit.allSuits {
 			let suitRankBits	= UInt(workBits & Consts.Hands.SuitMask64)
 			
 			if suitRankBits != 0 {
@@ -230,15 +230,14 @@ class Hand : CustomStringConvertible {
 				// Why not use an array like a sane person? Well, arrays are slow and I've been unable to find a way to make them
 				// as fast as I'd like. Also, assigning here using this switch is fractionally quicker than shifting and masking
 				// later on
-				switch rawSuit {
-					case Card.Suit.club.rawValue:		cBits = suitRankBits
-					case Card.Suit.diamond.rawValue:	dBits = suitRankBits
-					case Card.Suit.heart.rawValue:		hBits = suitRankBits
-					case Card.Suit.spade.rawValue:		sBits = suitRankBits
-					default:							break
+				switch suit {
+					case .club:		cBits = suitRankBits
+					case .diamond:	dBits = suitRankBits
+					case .heart:	hBits = suitRankBits
+					case .spade:	sBits = suitRankBits
 				}
 			}
-			workBits >>= UInt64(Card.Rank.NumRanks)
+			workBits >>= UInt64(Card.Rank.numRanks)
 		}
 		
 		if (cBits & dBits & hBits & sBits) != 0 {

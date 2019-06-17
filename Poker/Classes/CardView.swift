@@ -54,11 +54,11 @@ class CardView: UIView, CAAnimationDelegate {
 	}
 	
 	func animatePinned() {
-		if let card = self.card {
-			if !card.pin {
-				UIView.animate(withDuration: Consts.Views.PinAnimationTime) {
-					self.alpha = 0.40
-				}
+		guard let card = self.card else { return }
+		
+		if !card.pin {
+			UIView.animate(withDuration: Consts.Views.PinAnimationTime) {
+				self.alpha = 0.40
 			}
 		}
 	}
@@ -68,14 +68,12 @@ class CardView: UIView, CAAnimationDelegate {
 	}
 	
 	@objc func handleTap(_ recognizer: UIGestureRecognizer) {
-		if self.enabled {
-			if let card = self.card {
-				card.hold = !card.hold
-				self.update()
-				
-				NotificationCenter.default.post(name: NSNotification.Name(rawValue: Consts.Notifications.RefreshEV), object: card)
-			}
-		}
+		guard let card = self.card, self.enabled else { return }
+
+		card.hold = !card.hold
+		self.update()
+		
+		NotificationCenter.default.post(name: NSNotification.Name(rawValue: Consts.Notifications.RefreshEV), object: card)
 	}
 	
 	func beginReveal(clockwise: Bool = true) {

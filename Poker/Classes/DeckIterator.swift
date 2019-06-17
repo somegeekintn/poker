@@ -43,31 +43,53 @@ class DeckIterator : CustomStringConvertible {
 		}
 	}
 	
-	final func advanceWithHand(hand: Hand, deck: Deck) -> Bool {
-		var didAdvance	= true
+	final func advanceWithHand(hand: Hand, deck: Deck) -> Int? {
+		var selection	= self.generator.next()
 		
-		if let nextSelection = self.generator.next() {
+		if let nextSelection = selection {
 			hand[self.handPosition] = deck[nextSelection]
 			self.selection = nextSelection
 		}
 		else {
-			if let next = self.next {
-				didAdvance = next.advanceWithHand(hand: hand, deck: deck)
-				
-				if didAdvance {
-#warning("force unwrap")
-					self.range = next.selection! + 1 ... self.range.upperBound
-					self.generator = self.range.makeIterator()
-					self.selection = self.generator.next()
-#warning("force unwrap")
-					hand[self.handPosition] = deck[self.selection!]
+			if let nextIterator = self.next, let nextNextSelection = nextIterator.advanceWithHand(hand: hand, deck: deck) {
+				self.range = nextNextSelection + 1 ... self.range.upperBound
+				self.generator = self.range.makeIterator()
+				selection = self.generator.next()
+				if let nextSelection = selection {
+					hand[self.handPosition] = deck[nextSelection]
+					self.selection = nextSelection
 				}
-			}
-			else {
-				didAdvance = false;
 			}
 		}
 		
-		return didAdvance
+		return selection
 	}
+//	
+//	final func advanceWithHand(hand: Hand, deck: Deck) -> Bool {
+//		var didAdvance	= true
+//		
+//		if let nextSelection = self.generator.next() {
+//			hand[self.handPosition] = deck[nextSelection]
+//			self.selection = nextSelection
+//		}
+//		else {
+//			if let next = self.next {
+//				didAdvance = next.advanceWithHand(hand: hand, deck: deck)
+//				
+//				if didAdvance {
+//#warning("force unwrap")
+//					self.range = next.selection! + 1 ... self.range.upperBound
+//					self.generator = self.range.makeIterator()
+//					self.selection = self.generator.next()
+//#warning("force unwrap")
+//					hand[self.handPosition] = deck[self.selection!]
+//				}
+//			}
+//			else {
+//				didAdvance = false
+//			}
+//		}
+//		
+//		return didAdvance
+//	}
 }

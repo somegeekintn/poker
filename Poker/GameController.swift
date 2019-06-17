@@ -37,16 +37,9 @@ class GameController: UIViewController {
 		}
 		
 		Game.shared.evHandler = { (newEV: Double?) -> () in
-			var evLabel : String
+			let evLabel	= newEV.map({ String(format: "%0.3f", $0) }) ?? "..."
 			
-			if let ev = newEV {
-				evLabel = String(format: "%0.3f", ev)
-			}
-			else {
-				evLabel = "..."
-			}
-			
-			if (self.evLabel.text != evLabel) {
+			if self.evLabel.text != evLabel {
 				UIView.animate(withDuration: 0.2, animations: {
 					self.evLabel.alpha = 0.0
 				}, completion: { (didFinish) -> Void in
@@ -62,13 +55,13 @@ class GameController: UIViewController {
 			// transitions here, while updateElements can be called at any point
 			if let cardViews = self.cardViews {
 				switch newState {
-					case .Ready:
+					case .ready:
 						self.paytableView.category = .none
 						for cardView in cardViews {
 							cardView.card = nil
 							cardView.revealed = false
 						}
-					case .Dealt:
+					case .dealt:
 						self.evLabel.text = "..."
 						for cardView in cardViews {
 							let card	= Game.shared.playerCardAt(cardIndex: cardView.tag - Consts.Views.CardViewTagStart)
@@ -81,7 +74,7 @@ class GameController: UIViewController {
 								cardView.enabled = true
 							}
 						})
-					case .Complete:
+					case .complete:
 						let result			= Game.shared.hand.evaluate()
 						var revealCount		= 0
 						var dispatchTime	= TimeInterval(0.0)
@@ -180,27 +173,27 @@ class GameController: UIViewController {
 	}
 	
 	func resetAllCards(animated: Bool = false) {
-		if let cardViews = self.cardViews {
-			for cardView in cardViews {
-				cardView.setRevealed(value: false, animated: animated)
-				cardView.resetPinned()
-			}
+		guard let cardViews	= self.cardViews else { return }
+		
+		for cardView in cardViews {
+			cardView.setRevealed(value: false, animated: animated)
+			cardView.resetPinned()
 		}
 	}
 	
 	func updateElements(gameState: Game.State) {
 		switch gameState {
-			case .Ready:
+			case .ready:
 				self.betMaxButton.isEnabled = true
 				self.betOneButton.isEnabled = true
 				self.dealDrawButton.isEnabled = Game.shared.bet > 0
 				self.evContainer.isHidden = true
-			case .Dealt:
+			case .dealt:
 				self.betMaxButton.isEnabled = false
 				self.betOneButton.isEnabled = false
 				self.dealDrawButton.isEnabled = true
 				self.evContainer.isHidden = false
-			case .Complete:
+			case .complete:
 				self.betMaxButton.isEnabled = true
 				self.betOneButton.isEnabled = true
 				self.dealDrawButton.isEnabled = false
@@ -213,9 +206,9 @@ class GameController: UIViewController {
 	// MARK: - Handlers
 
 	@IBAction func handleBetOne(_ sender: AnyObject) {
-		if Game.shared.state == Game.State.Complete {
+		if Game.shared.state == .complete {
 			self.positionCards(position: UIRectEdge.left, animated: true, completion: {
-				Game.shared.state = Game.State.Ready
+				Game.shared.state = .ready
 				Game.shared.incrementBet(amount: 1)
 			})
 		}
@@ -225,9 +218,9 @@ class GameController: UIViewController {
 	}
 
 	@IBAction func handleBetMax(_ sender: AnyObject?) {
-		if Game.shared.state == Game.State.Complete {
+		if Game.shared.state == .complete {
 			self.positionCards(position: UIRectEdge.left, animated: true, completion: {
-				Game.shared.state = Game.State.Ready
+				Game.shared.state = .ready
 				Game.shared.betMax()
 				Game.shared.deal()
 			})
@@ -240,20 +233,20 @@ class GameController: UIViewController {
 
 	@IBAction func handleDealDraw(_ sender: AnyObject) {
 		switch Game.shared.state {
-			case Game.State.Ready:
+			case .ready:
 				Game.shared.deal()
 
-			case Game.State.Dealt:
+			case .dealt:
 				var hideCount		= 0
 				var dispatchTime	= TimeInterval(0.0)
 				
 				if let cardViews = self.cardViews {
 					for cardView in cardViews {
-						if let card = cardView.card {
-							if !card.hold {
-								hideCount += 1
-								cardView.setRevealed(value: false, animated: true)
-							}
+						guard let card = cardView.card else { continue }
+						
+						if !card.hold {
+							hideCount += 1
+							cardView.setRevealed(value: false, animated: true)
 						}
 					}
 				}
@@ -263,7 +256,7 @@ class GameController: UIViewController {
 				}
 				delay(dispatchTime) { Game.shared.draw() }
 
-			case Game.State.Complete:
+			case .complete:
 				break
 		}
 	}

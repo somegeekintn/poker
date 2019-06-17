@@ -48,10 +48,11 @@ class Card : Comparable, CustomStringConvertible {
 		case two = 0, three, four, five, six, seven, eight, nine, ten
 		case jack, queen, king, ace
 
-		static let MinRank	= two
-		static let MaxRank	= ace
-		static let NumRanks	= MaxRank.rawValue + 1
-		
+		static let minRank	= Rank.two
+		static let maxRank	= Rank.ace
+		static let numRanks	= Rank.maxRank.rawValue + 1
+		static let allRanks	: [Rank] = [.two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king, .ace]
+
 		var identifier		: String { return self.description }
 		var rankBit			: UInt { return UInt(1 << self.rawValue) }
 		var description		: String {
@@ -103,11 +104,12 @@ class Card : Comparable, CustomStringConvertible {
 	enum Suit: Int, CustomStringConvertible {
 		case club = 0, diamond, heart, spade
 		
-		static let MinSuit		= club
-		static let MaxSuit		= spade
-		static let NumSuits		= MaxSuit.rawValue + 1
-
-		var shiftVal			: UInt64 { return UInt64(self.rawValue * Card.Rank.NumRanks) }
+		static let minSuit		= Suit.club
+		static let maxSuit		= Suit.spade
+		static let numSuits		= Suit.maxSuit.rawValue + 1
+		static let allSuits		: [Suit] = [.club, .diamond, .heart, .spade]
+		
+		var shiftVal			: UInt64 { return UInt64(self.rawValue * Card.Rank.numRanks) }
 		var identifier			: String {
 			get {
 				switch self {
