@@ -117,8 +117,13 @@ struct CardSet: OptionSet, CustomStringConvertible {
 					return (category: .twoPair, relevant: CardSet(cards: self.cards.filter({ card in rankValues.contains(where: { card.rank.rawValue == $0 }) })))
 				}
 				else {
-					if let rankValue = any2.rawValue.firstNonzeroBitPosition, rankValue >= Card.Rank.jack.rawValue {
-						return (category: .jacksOrBetter, relevant: CardSet(cards: self.cards.filter({ $0.rank.rawValue == rankValue })))
+					if any2.rawValue >= (1 << Card.Rank.jack.rawValue) {
+						if let rankValue = any2.rawValue.firstNonzeroBitPosition {
+							return (category: .jacksOrBetter, relevant: CardSet(cards: self.cards.filter({ $0.rank.rawValue == rankValue })))
+						}
+						else {	// shouldn't be possible
+							return (category: .none, relevant: [])
+						}
 					}
 					else {
 						return (category: .none, relevant: [])
