@@ -92,7 +92,9 @@ class PokerTests: XCTestCase {
 		
 		deck.shuffle()
 		hand.initialDrawFromDeck(deck)
-		// Takes forever if we don't hold a card or two
+		
+		// Takes forever if we don't hold a card or two.
+		// Way faster in release, so maybe this is a bit pointless?
 		hand.cards[0].hold = true
 		hand.cards[1].hold = true
 		self.measure {
