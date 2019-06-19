@@ -22,19 +22,18 @@ func <(lhs: Card.Rank, rhs: Card.Rank) -> Bool {
 
 // MARK: - Card
 
-class Card : Comparable, CustomStringConvertible {
+class Card: Comparable, CustomStringConvertible {
 	final let rank		: Rank
 	final let suit		: Suit
-	final let bitFlag	: UInt64
 	var pin				: Bool = false		// indicates a card that is part of the current hand's category
 	var hold			: Bool = false
+	var cardSetValue	: UInt64 { return UInt64(self.rank.rankBit) << self.suit.shiftVal }
     var description		: String { return rank.description + suit.description }
     var fullDescription	: String { return rank.fullDescription + suit.fullDescription }
 
 	init(rank: Card.Rank, suit: Card.Suit) {
 		self.rank = rank
 		self.suit = suit
-		self.bitFlag = UInt64(self.rank.rankBit) << self.suit.shiftVal
 	}
 
 	func reset() {
@@ -53,6 +52,25 @@ class Card : Comparable, CustomStringConvertible {
 		static let numRanks	= Rank.maxRank.rawValue + 1
 		static let allRanks	: [Rank] = [.two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king, .ace]
 
+		init?(rankStr: String) {
+			switch rankStr {
+				case "A":	self = .ace
+				case "K":	self = .king
+				case "Q":	self = .queen
+				case "J":	self = .jack
+				case "T":	self = .ten
+				case "9":	self = .nine
+				case "8":	self = .eight
+				case "7":	self = .seven
+				case "6":	self = .six
+				case "5":	self = .five
+				case "4":	self = .four
+				case "3":	self = .three
+				case "2":	self = .ace
+				default:	return nil
+			}
+		}
+		
 		var identifier		: String { return self.description }
 		var rankBit			: UInt { return UInt(1 << self.rawValue) }
 		var description		: String {
@@ -108,7 +126,8 @@ class Card : Comparable, CustomStringConvertible {
 		static let maxSuit		= Suit.spade
 		static let numSuits		= Suit.maxSuit.rawValue + 1
 		static let allSuits		: [Suit] = [.club, .diamond, .heart, .spade]
-		
+		static let rankMask		= UInt64(0x1fff)	// Card.Rank.numRanks bits
+
 		var shiftVal			: UInt64 { return UInt64(self.rawValue * Card.Rank.numRanks) }
 		var identifier			: String {
 			get {
@@ -124,10 +143,10 @@ class Card : Comparable, CustomStringConvertible {
 		var description			: String {
 			get {
 				switch self {
-					case .club:		return "♣︎"
-					case .diamond:	return "♦︎"
-					case .heart:	return "♥︎"
-					case .spade:	return "♠︎"
+					case .club:		return "♣︎"	// "♣️"
+					case .diamond:	return "♦︎"	// "♦️"
+					case .heart:	return "♥︎"	// "♥️"
+					case .spade:	return "♠︎"	// "♠️"
 				}
 			}
 		}
@@ -144,4 +163,30 @@ class Card : Comparable, CustomStringConvertible {
 		}
 	}
 }
+
+// MARK: - Visual card notation -
+
+let A = 12
+let K = 11
+let Q = 10
+let J = 9
+let T = 8
+
+postfix operator ♣️
+postfix func ♣️ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .club) }) ?? Card(rank: .two, suit: .club) }
+postfix operator ♦️
+postfix func ♦️ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .diamond) }) ?? Card(rank: .two, suit: .diamond) }
+postfix operator ♥️
+postfix func ♥️ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .heart) }) ?? Card(rank: .two, suit: .heart) }
+postfix operator ♠️
+postfix func ♠️ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .spade) }) ?? Card(rank: .two, suit: .spade) }
+
+postfix operator ♣︎
+postfix func ♣︎ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .club) }) ?? Card(rank: .two, suit: .club) }
+postfix operator ♦︎
+postfix func ♦︎ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .diamond) }) ?? Card(rank: .two, suit: .diamond) }
+postfix operator ♥︎
+postfix func ♥︎ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .heart) }) ?? Card(rank: .two, suit: .heart) }
+postfix operator ♠︎
+postfix func ♠︎ (rank: Int) -> Card { return Card.Rank(rawValue: rank).map({ Card(rank: $0, suit: .spade) }) ?? Card(rank: .two, suit: .spade) }
 

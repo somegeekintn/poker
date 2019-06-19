@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: - Core Data stack
 
+#warning("Real app would handle Core Data errors")
+
 	lazy var applicationDocumentsDirectory	: URL? = {
 		let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 		
@@ -36,8 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
 		}
 		catch (let error as NSError) {
-#warning("A real app would handle this more gracefully")
-	        NSLog("Unresolved error \(error), \(error.userInfo)")
 	        abort()
 		}
 		
@@ -83,7 +83,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				try moc.save()
 			}
 			catch (let error as NSError) {
-#warning("A real app would handle this more gracefully")
 				NSLog("Unresolved error \(error), \(error.userInfo)")
 			}
 		}

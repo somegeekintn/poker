@@ -47,3 +47,13 @@ extension NSMutableParagraphStyle {
 		return style
 	}
 }
+
+extension FixedWidthInteger {
+	var nonzeroBitPositions		: [Int] {
+		return (0..<self.bitWidth).compactMap({ (self & (1 << $0)) != 0 ? $0 : nil })
+	}
+
+	var firstNonzeroBitPosition	: Int? {
+		return (0..<self.bitWidth).first(where: { (self & (1 << $0)) != 0 })
+	}
+}

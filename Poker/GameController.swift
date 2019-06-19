@@ -74,8 +74,7 @@ class GameController: UIViewController {
 								cardView.enabled = true
 							}
 						})
-					case .complete:
-						let result			= Game.shared.hand.evaluate()
+					case .complete(let result):
 						var revealCount		= 0
 						var dispatchTime	= TimeInterval(0.0)
 						
@@ -203,7 +202,7 @@ class GameController: UIViewController {
 	// MARK: - Handlers
 
 	@IBAction func handleBetOne(_ sender: AnyObject) {
-		if Game.shared.state == .complete {
+		if case .complete = Game.shared.state  {
 			self.positionCards(position: UIRectEdge.left, animated: true, completion: {
 				Game.shared.state = .ready
 				Game.shared.incrementBet(amount: 1)
@@ -215,7 +214,7 @@ class GameController: UIViewController {
 	}
 
 	@IBAction func handleBetMax(_ sender: AnyObject?) {
-		if Game.shared.state == .complete {
+		if case .complete = Game.shared.state  {
 			self.positionCards(position: UIRectEdge.left, animated: true, completion: {
 				Game.shared.state = .ready
 				Game.shared.betMax()
