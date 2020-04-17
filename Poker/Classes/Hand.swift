@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Quiet Spark. All rights reserved.
 //
 
-import Swift
+import Foundation
 
-class Hand : CustomStringConvertible {
+class Hand: CustomStringConvertible {
 	var cards				: [Card] { return self.cardSlots.compactMap({ $0 }) }
 	var cardSet				: CardSet { return CardSet(rawValue: self.cardSlots.reduce(UInt64(0), { (result, slot) -> UInt64 in slot.map({ result | $0.cardSetValue }) ?? result })) }
 	var heldCards			: [Card] { return self.cards.filter({ $0.hold })}
@@ -42,6 +42,10 @@ class Hand : CustomStringConvertible {
 		set { self.cardSlots[position] = newValue }
 	}
 
+	func fillWithCards(_ cards: [Card]) {
+		_ = cards.enumerated().map { self.cardSlots[$0.0] = $0.1 }
+	}
+	
 	func initialDrawFromDeck(_ deck: Deck) {
 		self.cardSlots = [Card?](repeating: nil, count: Consts.Game.MaxHandCards)
 		self.drawFromDeck(deck)
@@ -50,11 +54,7 @@ class Hand : CustomStringConvertible {
 	}
 	
 	func drawFromDeck(_ deck: Deck) {
-		for (index, value) in self.cardSlots.enumerated() {
-			if (value == nil || !value!.hold) {
-				self.cardSlots[index] = deck.drawCard()
-			}
-		}
+		self.cardSlots = self.cardSlots.map { return $0 == nil || $0?.hold == false ? deck.drawCard() : $0  }
 	}
 	
 	func evaluate() -> Category {

@@ -32,7 +32,7 @@ struct CardSet: OptionSet, CustomStringConvertible {
 		
 		while setBits != 0 {
 			if setBits & 1 != 0 {
-				if let rank = Card.Rank(rawValue: bitCount % Card.Rank.numRanks), let suit = Card.Suit(rawValue: bitCount / Card.Rank.numRanks) {
+				if let rank = Card.Rank(rawValue: bitCount % Card.Rank.allCases.count), let suit = Card.Suit(rawValue: bitCount / Card.Rank.allCases.count) {
 					cards.append(Card(rank: rank, suit: suit))
 				}
 			}
@@ -64,11 +64,13 @@ struct CardSet: OptionSet, CustomStringConvertible {
 	}
 	
     func eval() -> (category: Hand.Category, relevant: CardSet) {
+		let rawValue	= self.rawValue
+		let rankMask	= Card.Suit.rankMask
 		let suitRanks 	: [UInt64] = [	// Unrolling is faster than Card.Suit.allSuits.map...
-							(self.rawValue >> Card.Suit.club.shiftVal) & Card.Suit.rankMask,
-							(self.rawValue >> Card.Suit.diamond.shiftVal) & Card.Suit.rankMask,
-							(self.rawValue >> Card.Suit.heart.shiftVal) & Card.Suit.rankMask,
-							(self.rawValue >> Card.Suit.spade.shiftVal) & Card.Suit.rankMask
+							(rawValue >> Card.Suit.club.shiftVal) & rankMask,
+							(rawValue >> Card.Suit.diamond.shiftVal) & rankMask,
+							(rawValue >> Card.Suit.heart.shiftVal) & rankMask,
+							(rawValue >> Card.Suit.spade.shiftVal) & rankMask
 						]
 		let any2Raw 	: [UInt64] = [
 							suitRanks[Card.Suit.club.rawValue] & suitRanks[Card.Suit.diamond.rawValue],
@@ -95,7 +97,7 @@ struct CardSet: OptionSet, CustomStringConvertible {
 				any4 = CardSet(rawValue: any3Raw[0] & suitRanks[Card.Suit.spade.rawValue])
 				
 				if !any4.isEmpty {
-					return (category: .fourOfAKind, relevant: CardSet(rawValue: Card.Suit.allSuits.reduce(UInt64(0), { $0 | (any4.rawValue << $1.shiftVal) })))
+					return (category: .fourOfAKind, relevant: CardSet(rawValue: Card.Suit.allCases.reduce(UInt64(0), { $0 | (any4.rawValue << $1.shiftVal) })))
 				}
 				else {
 					any2.subtract(any3)
@@ -132,7 +134,7 @@ struct CardSet: OptionSet, CustomStringConvertible {
 			}
 		}
 		else {				// Only bother with this if there are no pairs or better
-			let allSuitBits	= Card.Suit.allSuits.reduce(UInt64(0), { (result, suit) -> UInt64 in result | suitRanks[suit.rawValue] })
+			let allSuitBits	= Card.Suit.allCases.reduce(UInt64(0), { (result, suit) -> UInt64 in result | suitRanks[suit.rawValue] })
 			let hasStraight	= CardSet.allStraights.contains(where: { allSuitBits == $0.rawValue })
 
 			for suitBits in suitRanks {

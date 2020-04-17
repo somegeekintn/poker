@@ -7,19 +7,12 @@
 //
 
 import Foundation
-import Swift
 
-class Deck : CustomStringConvertible {
+class Deck: Collection, CustomStringConvertible {
+	var startIndex	= 0
+	var endIndex	: Int { self.cards.count }
 	var cards		= [Card]()
-	var position	= 0
-	
-	init() {
-		for suit in Card.Suit.allSuits {
-			for rank in Card.Rank.allRanks {
-				self.cards.append(Card(rank: rank, suit: suit))
-			}
-		}
-	}
+	var iterator	: IndexingIterator<[Card]>
 	
     var description: String {
 		get {
@@ -35,23 +28,33 @@ class Deck : CustomStringConvertible {
 			return desc
 		}
 	}
+
+	init() {
+		let cards = Card.Suit.allCases.flatMap({ s in Card.Rank.allCases.map({ Card(rank: $0, suit: s) }) })
+		
+		self.cards = cards
+		self.iterator = cards.makeIterator()
+	}
+	
+	func index(after i: Int) -> Int {
+		return i + 1
+	}
 	
     final subscript (position: Int) -> Card {
 		get {
 			return self.cards[position]
 		}
 	}
-	
+
 	func shuffle() {
-		self.position = 0
 		self.cards.shuffle()
+		self.iterator = self.cards.makeIterator()
 	}
 	
-	func drawCard() -> Card {
-		let card = self.cards[self.position]
+	func drawCard() -> Card? {
+		let card = self.iterator.next()
 		
-		self.position += 1
-		card.reset()
+		card?.reset()
 
 		return card
 	}

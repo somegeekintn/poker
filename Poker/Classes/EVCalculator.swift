@@ -36,7 +36,7 @@ class EVCalculator {
 		let startTime	= Date()
 		let testHand	= Hand()
 		
-		for (index, card) in heldCards.enumerated() { testHand[index] = card }
+		testHand.fillWithCards(heldCards)
 		if heldCards.count < Consts.Game.MaxHandCards {
 			var iterator	: DeckIterator
 			var evCategory	: Hand.Category

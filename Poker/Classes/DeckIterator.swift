@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Quiet Spark. All rights reserved.
 //
 
+import Foundation
+
 class DeckIterator : CustomStringConvertible {
 	var next			: DeckIterator?
 	var range			: ClosedRange<Int>
@@ -32,6 +34,7 @@ class DeckIterator : CustomStringConvertible {
 		self.handPosition = Consts.Game.MaxHandCards - drawCount
 		self.range = startPosition...endRange
 		self.generator = self.range.makeIterator()
+NSLog("iterate @ \(self.handPosition) with \(self.range)")
 		hand[self.handPosition] = deck[startPosition]
 		
 		if (drawCount > 1) {
@@ -64,32 +67,4 @@ class DeckIterator : CustomStringConvertible {
 		
 		return selection
 	}
-//	
-//	final func advanceWithHand(hand: Hand, deck: Deck) -> Bool {
-//		var didAdvance	= true
-//		
-//		if let nextSelection = self.generator.next() {
-//			hand[self.handPosition] = deck[nextSelection]
-//			self.selection = nextSelection
-//		}
-//		else {
-//			if let next = self.next {
-//				didAdvance = next.advanceWithHand(hand: hand, deck: deck)
-//				
-//				if didAdvance {
-//#warning("force unwrap")
-//					self.range = next.selection! + 1 ... self.range.upperBound
-//					self.generator = self.range.makeIterator()
-//					self.selection = self.generator.next()
-//#warning("force unwrap")
-//					hand[self.handPosition] = deck[self.selection!]
-//				}
-//			}
-//			else {
-//				didAdvance = false
-//			}
-//		}
-//		
-//		return didAdvance
-//	}
 }

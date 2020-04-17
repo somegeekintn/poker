@@ -16,7 +16,7 @@ import UIKit
 func delay(_ delay: Double, qos: DispatchQoS.QoSClass = DispatchQoS.QoSClass.unspecified, closure: @escaping ()->()) {
 	let queue = qos == DispatchQoS.QoSClass.unspecified ? DispatchQueue.main : DispatchQueue.global(qos: qos)
 
-	queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
+	queue.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
 }
 
 func dispatch_async(_ qos: DispatchQoS.QoSClass = DispatchQoS.QoSClass.unspecified, closure: @escaping ()->()) {
