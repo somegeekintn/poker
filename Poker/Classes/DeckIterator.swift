@@ -34,7 +34,6 @@ class DeckIterator : CustomStringConvertible {
 		self.handPosition = Consts.Game.MaxHandCards - drawCount
 		self.range = startPosition...endRange
 		self.generator = self.range.makeIterator()
-NSLog("iterate @ \(self.handPosition) with \(self.range)")
 		hand[self.handPosition] = deck[startPosition]
 		
 		if (drawCount > 1) {

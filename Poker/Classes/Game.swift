@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class Game : CustomStringConvertible {
 	enum State: CustomStringConvertible {
@@ -32,20 +33,16 @@ class Game : CustomStringConvertible {
 	var hand					= Hand()
 	var gameData				: GameData?
 	let evCalculator			= EVCalculator()
-	var betHandler				: ((_ newBet: Int) -> Void)? = nil
-	var evHandler				: ((_ newEV: Double?) -> Void)? = nil
-	var stateHandler			: ((_ newState: State) -> Void)? = nil
+	
 	var lastWin					: Int = 0
 	
+	var evPublisher				: Published<EVCalculator.State>.Publisher { return self.evCalculator.$state }
 	var canDeal					: Bool { if case .ready = self.state, self.bet != 0 { return true } else { return false } }
 	var credits					: Int { return self.gameData?.credits.intValue ?? 0 }
 
-	var actualBet				: Int = 0 {
-		didSet(oldValue) {
-			self.betHandler?(self.bet)
-		}
-	}
-	
+	@Published var actualBet	: Int = 0
+	private var evRefeshMonitor	: AnyCancellable?
+
     var bet						: Int {
 		set (newValue) {
 			var actualValue		= (newValue > Game.maxBet) ? Game.maxBet : newValue
@@ -71,22 +68,19 @@ class Game : CustomStringConvertible {
 		}
 	}
 	
-	var state					: State = State.ready {
+	@Published var state		: State = State.ready {
 		willSet(newValue) {
 			switch newValue {
 				case .ready:
 					self.actualBet = 0
 					self.lastWin = 0
-					self.evHandler?(nil)
 				
 				case .dealt:
 					self.calculateEV()
 				
-				default:
-					break
+				case .complete:
+					self.evCalculator.reset()
 			}
-			
-			self.stateHandler?(newValue)
 		}
 	}
 	
@@ -107,15 +101,7 @@ class Game : CustomStringConvertible {
 	
 	required init() {
 		self.gameData = GameData.gameData()
-		
-		self.evCalculator.handler = { [weak self] (ev: Double?) in self?.evHandler?(ev) }
-		NotificationCenter.default.addObserver(forName: NSNotification.Name(Consts.Notifications.RefreshEV), object: nil, queue: nil) { [weak self] _ in
-			self?.calculateEV()
-		}
-	}
-	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
+		self.evRefeshMonitor = NotificationCenter.default.publisher(for: NSNotification.Name(Consts.Notifications.RefreshEV)).sink { [weak self] _ in self?.calculateEV() }
 	}
 	
 	// MARK: - Betting
@@ -169,9 +155,14 @@ class Game : CustomStringConvertible {
 		
 		return drew
 	}
-
+	var calculator	: AnyCancellable?
+	
 	func calculateEV() {
 		self.evCalculator.calculateEV(heldCards: self.hand.heldCards, inDeck: self.deck, withBet: self.actualBet)
+//
+//		self.calculator = EVCalculator.Publisher(cards: self.hand.heldCards, inDeck: self.deck, withBet: self.actualBet).sink { (state) in
+//			print("published state: \(state)")
+//		}
 	}
 
 	// MARK: - Debugging

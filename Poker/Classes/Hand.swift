@@ -42,6 +42,13 @@ class Hand: CustomStringConvertible {
 		set { self.cardSlots[position] = newValue }
 	}
 
+	init() {	// empty hand
+	}
+	
+	init(cards: [Card]) {
+		_ = cards.enumerated().map { self.cardSlots[$0.0] = $0.1 }
+	}
+	
 	func fillWithCards(_ cards: [Card]) {
 		_ = cards.enumerated().map { self.cardSlots[$0.0] = $0.1 }
 	}
